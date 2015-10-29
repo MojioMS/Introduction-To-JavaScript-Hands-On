@@ -1,0 +1,159 @@
+<HTML>
+<head>
+<body>
+ <title> Session 1 and 2 </title>
+                                   
+    <h1> This is a Headline, its bigger than other lines</h1>
+    <h2> this is a smaller headline, but its still bigger than other usual lines </h2>
+    
+    <p> this is just a usual line, smaller than the headlines </p>
+    
+    <p> and another line </p>
+    
+    <!--This is a comment. Comments are not displayed in the browser-->
+    <!--comments have absolutely no effect on the program.-->
+    
+    <!-- with identifier (abbreviated as 'id') i can change the identified
+         object later in the javascript-code. Here are three lines. Later I will
+         put some text into them. --> 
+    <p id="p1"> Im a line with an ID!! </p>
+    <p id="p2"> </p>
+    <p id="p3"> </p>
+    
+	<p>Creating and using an object method.</p>
+
+	<p> An object method is a function definition, stored as a property value.</p>
+
+	<!-- With these lines, I want to test the loops later. -->
+	<p id="courselist1"> Im a line with an ID!! <p>    
+    <p id="courselist2"> Im a line with an ID!! <p>    
+    <p id="courselist3"> Im a line with an ID!! <p>    
+
+</body> </head>
+   <!--now i will start programming in javascript.-->
+<script>	
+	// comments in javascript are dont with doubleslashes!
+	
+	// I start with an array of variables. i call that array 'evennumbers'. 
+	var evennumbers = [];   // creating an empty array.
+	
+	// push: adds the elements at the end of the array.
+	evennumbers.push(2);     // evennumbers = [2]				
+	evennumbers.push(4,6,8); // evennumbers = [2,4,6,8]
+	
+	
+	
+	var oddnumbers = [];    // creating an empty array.
+	
+	// unshift: adds the elements to the front of the array.
+	oddnumbers.unshift(1);		// oddnumbers = [1]			
+	oddnumbers.unshift(3,5,7);	// oddnumbers = [3,5,7,1]  
+	
+	// shift: removes specified Elements
+	oddnumbers.shift(5,7,1);    // oddnumbers = [3] 		
+	
+	
+	var courselist="";		// creating an empty "String" variable. Strings can store letters and characters instead of numbers (e.g. "dog", "cat", "no.7")
+	
+	//splice(startindex,numbersOFElementsToRemove, AddElement1, AddElement2, ..., AddElementN);
+
+	// Now I create my own variable. It should store People of real life. People have the properties: Firstname, Lastname, Age. 
+	// I also let People have a method: fullName(): this method is supposed to give back a String, that contains First- and Lastname of the person.
+	function Person(fn, ln, old)   // When creating a Person, you have to enter his firstname (fn), lastname (ln) and his age (old).
+	{
+		this.firstname = fn;       // the parameters 'fn', 'ln', 'old' are stored for the person-object into its property-attributes
+		this.lastname = ln; 	   // the property-attributes are 'firstname','lastname', 'age'
+		this.age = old;
+		this.fullName = function(){return this.firstname+" "+this.lastname;} // here is the method, that will return the entire name of a person.
+	}
+	
+	// now i create some example persons with my Person-object above:
+	var person1 = new Person('Angela','Merkel',61);   // Person 1
+	var person2 = new Person('John', 'Wayne', 45);    // Person 2
+	var person3 = new Person('Morty', 'Rick', 30);    // Person 3
+							
+	// now i wanna test, if my Person-object works correctly, I use console.logouts for this:
+    console.log("person1's name is: "+person1.fullName()+ " and it's age is: "+person1.age);     
+	console.log("person2's name is: "+person2.fullName()+ " and it's age is: "+person2.age);   
+	console.log("person3's name is: "+person3.fullName()+ " and it's age is: "+person3.age);   
+			
+	// I also wanna show the persons names and ages on my website. Thus I make use of the empty lines with the ids 'p1', 'p2', and 'p3' from my HTML code above.
+	// I access the Element by its id, and set its String to another:
+	document.getElementById("p1").innerHTML = "person1's name is: "+person1.fullName()+ " and it's age is: "+person1.age;
+			
+	document.getElementById("p2").innerHTML = "person2's name is: "+person2.fullName()+ " and it's age is: "+person2.age;
+	
+	document.getElementById("p3").innerHTML = "person3's name is: "+person3.fullName()+ " and it's age is: "+person3.age;
+			
+			
+			
+    function add(a,b,c)
+    {
+    	return a+b+c;  // the return was missing in the hand-on exercise.
+	}
+
+    console.log("add(1,2,3)= "+add(1,2,3)); // should be 6
+
+    
+	// i don't know if 'day' < 'daylight' is true or false, but i will use console.log to get informed about it:
+	if ('day' < 'daylight') {
+    	console.log("day < daylight");
+    }
+	
+	// same with 'Hello' < 'hello':
+    if ('Hello' < 'hello') {
+        console.log("Hello < hello");
+    }
+			
+            
+	// now i wanna test the different loops:
+	
+    var courses = new Array(0);		// creating an empty Array.
+	courselist = "";				// creating an empty String.
+	
+	// putting 4 seperate String into my Array:
+    courses.push('Introduction to JavaScript and LinkedData','Direction Maps','Sensebox for People-Centered Urban Planning','Spatial Databases');
+	
+	// The for-loop:
+	for (var i=0; i<courses.length; i++) {  
+    	console.log("course: "+(i+1)+": "+courses[i]); // for every i from 0 ... last index of my array courses, i write on the console the course i
+		courselist = courselist + courses[i] + ", ";   // I add the course i to my courselist String, and add a komma-seperation ", "
+    }
+					
+	document.getElementById("courselist1").innerHTML = courselist; // I show the String containing all elements of the array on the website.
+		
+	
+	console.log("popping out the last Element:");
+    courses.pop(); // the last element of the array is deleted.
+	
+	courselist = ""; // String done empty.
+                    
+    var index=0; // i have no index-counter in do-while-loops. That's why i am doing my own counter index-variable here.
+			
+    do {                                    
+    	console.log("course: "+(index+1)+": "+courses[index]);  // log the current indexed course.
+		courselist = courselist + courses[index] + ", ";		// I add the current indexed course to my courselist String, and all ", "
+        index++;												// I increase my index-variable by 1. index++; is similiar to index = index + 1;
+    } while (index < courses.length);								// I only repeat the code, while the condition (index < length of my array)
+			
+	document.getElementById("courselist2").innerHTML = courselist;   // I show the String containing all elements of the array on the website.
+	
+	
+	console.log("deleting the 2nd Element and inserting 3 others instead:");
+	courses.splice(1,1,'HCI Research Methods','GI Kolloquium','GIS in developing Countries');
+			
+	
+	courselist = ""; // deleting the String;
+    var index=0;	 // creating a index-counter for the while-loop
+    
+	while (index < courses.length) {        //while my condition (index < length of my array) is true, i repeat the following code:
+    	console.log("course: "+(index+1)+": "+courses[index]);		// log the current indexed course.
+		courselist = courselist + courses[index] + ", ";			// I add the current indexed course to my courselist String, and all ", "
+        index++;													// I increase my index-variable by 1. index++; is similiar to index = index + 1;
+    }
+	
+	document.getElementById("courselist3").innerHTML = courselist; 	// I show the String containing all elements of the array on the website.
+	
+</script>   
+            
+</HTML>

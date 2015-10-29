@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Session 3!</title>
+</head>
+
+<body onresize="Alert()">
+	<p id="emp"> </p>
+    <p id="emp2"> </p>
+    <p id="dtS"> </p>
+    
+    <form>
+    	<p>When? Every Wednesday</p>
+        <p>Where? Institute for Geoinformatics</p>
+        <p>Where (more precisely)? GEO 1, 3rd floor, Room 323</p>
+        <p>Course Language: English </p>
+    <fieldset>
+        <legend>Some information about me: </legend>
+    	<p>First Name: <input type="text" name="Firstname" /> </p>
+        <p>Password: <input type="password" name="pwd" /> </p>
+        
+        <p> Please select the topic for your project work: </p> 
+        <select id="selecter" name="topic" size="5" onchange="changeSelection()">
+        	<option> JavaScript Development</option>
+            <option> LinkedData Engineering</option>
+            <option> Usability Interacting </option>
+            <option> Import/Export </option>
+            <option selected> I dont know yet </option>
+        </select>
+        <p id="sel"> Selected: I dont know yet</p>
+        
+        <p> Target degree: 
+        <input type="radio" id="bsc" name="degree" value="Bachelor" /><label for="bsc"> Bachelor </label>
+        <input type="radio" id="msc" name="degree" value="Master" /><label for="msc"> Master </label>
+        <input type="radio" id="phd" name="degree" value="PhD" /><label for="phd"> PhD </label>
+        <input type="radio" id="not" name="degree" value="none" /><label for="not"> none of these </label>
+		</p>
+        
+        <p> Why I've decided to study Geoinformatics: </p>
+        <label for="check1">
+            <input type="checkbox" name="reason" value="geography" id="check1" >"I'm interested in everything that is related to geography"</label><br>
+        <label for="check2">
+       		<input type="checkbox" name="reason" value="informatics" id="check2" >"I'm interested in everything that is related to informatics"</label><br>
+        <label for="check3">
+            	<input type="checkbox" name="reason" value="must" id="check3" >"I must study"</label><br>
+        <label for="check4">
+            	<input type="checkbox" name="reason" value="like" id="check4" checked>"I like to study"</label><br>
+                
+        <p> Here is my CV: <input type="file"> </p> <p id="CV"> keine Datei ausgewählt. </p>
+        
+        <p> Do you have any Questions or Comments? </p>
+        <textarea cols="50" rows="10" id="comments">Type your questions and comments in here...</textarea><br />
+        
+        <button type="button"> Submit </button>
+    </fieldset>
+    </form>
+    
+</body>
+
+<script>
+
+	function Employee(firstname, lastname, age){
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.age = age; 
+		this.fullName = function() { return this.firstname + " " + this.lastname; }
+	}
+		
+	function Department(name){
+		this.name = name;
+		this.employees = new Array(0);
+		this.addNewEmployee = function(emp){ this.employees.push(emp); }
+	}
+	
+	var emp1 = new Employee('Max', 'Mustermann', 25);
+	var emp2 = new Employee('Sarah', 'Wayne', 29);
+	var ifgi = new Department('ifgi');
+	ifgi.addNewEmployee(emp1);
+	ifgi.addNewEmployee(emp2);
+	
+	
+	document.getElementById("emp").innerHTML = emp1.firstname+" "+emp1.lastname+" is "+emp1.age+" years old." ;
+	
+	document.getElementById("emp2").innerHTML = emp2.firstname+" "+emp2.lastname+" is "+emp2.age+" years old." ;
+	
+	var employeelist = "";
+	
+	for (var i=0; i<ifgi.employees.length;i++){
+		employeelist = employeelist+ "; " + ifgi.employees[i].fullName();
+	}
+	document.getElementById("dtS").innerHTML = ifgi.name+ " has the following employees" + employeelist;
+	
+	ifgi.toSource(); // i dunno :-(
+	
+	var employeelist = "";
+	
+	for (var i=0; i<ifgi.employees.length;i++){
+		employeelist = employeelist+ "; " + ifgi.employees[i].fullName();
+	}
+	document.getElementById("dtS").innerHTML = ifgi.name+ " has the following employees" + employeelist;
+	// after using .toSource() on the object 'ifgi', the output is still the same. no clue what .toSource() does.
+	
+	function willNotChange(x) {
+		console.log("Passage by value, before assignment x = " + x);
+		x=2;
+		console.log("Passage by value, after assignment x = " + x);
+	}
+	
+	function willChange(x) {
+		console.log("Passage by value, before assignment x.num = " + x.num);
+		x.num=2;
+		console.log("Passage by value, after assignment x.num = " + x.num);
+	}
+	
+	willNotChange(5);
+	willChange(5);
+	
+	function Alert(){alert("Hello!");};
+	
+	function changeSelection(){
+		var index = document.getElementById("selecter").selectedIndex;
+		if (index==0){
+					document.getElementById("sel").innerHTML ="Selected: JavaScript Development" ;};
+		if (index==1){
+					document.getElementById("sel").innerHTML="Selected: LinkedData Engineering" ;};
+		if (index==2){
+					document.getElementById("sel").innerHTML="Selected: Usability Interacting" ;};
+		if (index==3){
+					document.getElementById("sel").innerHTML="Selected: Import/Export" ;};
+		if (index==4){
+					document.getElementById("sel").innerHTML="Selected: I dont know yet" ;};
+	};
+	
+</script>
+
+</html>
