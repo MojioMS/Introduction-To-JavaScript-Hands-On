@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Session 4!</title>
+</head>
+
+<body>
+    <div id="dialog" title="Basic dialog window">
+      <p> Welcome to the site!</p>
+    </div>
+    
+    <form>
+    
+    <p>When? Every Wednesday</p>
+    <p>Where? Institute for Geoinformatics</p>
+    <p>Where (more precisely)? GEO 1, 3rd floor, Room 323</p>
+    <div id="div1">
+    </div>
+        
+        <p>Course Language: English </p>
+    <fieldset>
+        <legend>Some information about me: </legend>
+        
+        <p>Date: <input type="text" id="datepicker" /> </p>
+    	<p>First Name: <input type="text" name="Firstname" /> </p>
+        <p>Password: <input type="password" name="pwd" /> </p>
+        
+        <p> Please select the topic for your project work: </p> 
+        <select id="selecter" name="topic" size="5" onchange="changeSelection()">
+        	<option> JavaScript Development</option>
+            <option> LinkedData Engineering</option>
+            <option> Usability Interacting </option>
+            <option> Import/Export </option>
+            <option selected> I dont know yet </option>
+        </select>
+        <p id="sel"> Selected: I dont know yet</p>
+        
+        <p> Target degree: 
+        <input type="radio" id="bsc" name="degree" value="Bachelor" /><label for="bsc"> Bachelor </label>
+        <input type="radio" id="msc" name="degree" value="Master" /><label for="msc"> Master </label>
+        <input type="radio" id="phd" name="degree" value="PhD" /><label for="phd"> PhD </label>
+        <input type="radio" id="not" name="degree" value="none" /><label for="not"> none of these </label>
+		</p>
+        
+        <p> Why I've decided to study Geoinformatics: </p>
+        <label for="check1">
+            <input type="checkbox" name="reason" value="geography" id="check1" >"I'm interested in everything that is related to geography"</label><br>
+        <label for="check2">
+       		<input type="checkbox" name="reason" value="informatics" id="check2" >"I'm interested in everything that is related to informatics"</label><br>
+        <label for="check3">
+            	<input type="checkbox" name="reason" value="must" id="check3" >"I must study"</label><br>
+        <label for="check4">
+            	<input type="checkbox" name="reason" value="like" id="check4" checked>"I like to study"</label><br>
+                
+        <p> Here is my CV: <input type="file"> </p> 
+        
+        <p> Do you have any Questions or Comments? </p>
+        <textarea cols="50" rows="10" id="comments">Type your questions and comments in here...</textarea><br />
+        
+        <button type="button" disabled="disabled"> Submit </button>
+    </fieldset>
+    
+    <button type="button" onclick="selectAllCheckboxes()"> Select all checkboxes </button>
+    <button type="button" onclick="newPara()"> Add New Paragraphs </button>
+    <button type="button" id="btn_fadeParas" onclick="fadePara()"> Fade Out Paragraphs </button>
+    <button type="button" id="btn_hideInput" onclick="hideInput()"> Hide Input Elements </button>
+    </form>
+    
+</body>
+  <link href="jquery-ui-1.11.4.custom/jquery-ui.css" rel="stylesheet">
+  <script src="jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
+  	<script src="jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+	<script>
+	$(function() {
+    	$( "#datepicker" ).datepicker();
+  	});
+	
+	$(function() {
+    	$( "#dialog" ).dialog();
+  	});
+    
+	var hideInputs = false;
+	var fadedParas = false;
+	
+	function hideInput(){
+		if (hideInputs){
+			hideInputs = false;
+			$("input").show();
+			$("#btn_hideInput").html("Hide Input Elements");
+		} else {
+			hideInputs = true;
+			$("input").hide();
+			$("#btn_hideInput").html("Show Input Elements");
+		}
+	}
+	
+	function fadePara(){
+		if (fadedParas) {
+			$("#div1").fadeIn(5000);
+			fadedParas = false;
+			$("#btn_fadeParas").html("Fade Out Paragraphs");
+		} else {
+			$("#div1").fadeOut(5000);
+			fadedParas = true;
+			$("#btn_fadeParas").html("Fade In Paragraphs");
+		}
+	}
+	
+	function newPara(){
+		var para = document.createElement("p");
+		var node = document.createTextNode("Location on Google Maps: ");
+		var a = document.createElement("a");
+		a.href = "https://www.google.de/maps/place/GEO+1,+Heisenbergstra%C3%9Fe+2,+48149+M%C3%BCnster/@51.9689517,7.5937545,17z/data=!3m1!4b1!4m2!3m1!1s0x47b9ba9f3f04a49f:0x3f84bac907101f6c";
+		a.innerHTML = "View here";
+		a.target="_blank";
+		para.appendChild(node);
+		para.appendChild(a);
+		var element = document.getElementById("div1");
+		element.appendChild(para);
+	}
+	
+	function selectAllCheckboxes(){
+		document.getElementById("check1").checked = true;
+		document.getElementById("check2").checked = true;
+		document.getElementById("check3").checked = true;
+		document.getElementById("check4").checked = true;
+	}
+	
+	function changeSelection(){
+		var index = document.getElementById("selecter").selectedIndex;
+		if (index==0){
+					document.getElementById("sel").innerHTML ="Selected: JavaScript Development" ;};
+		if (index==1){
+					document.getElementById("sel").innerHTML="Selected: LinkedData Engineering" ;};
+		if (index==2){
+					document.getElementById("sel").innerHTML="Selected: Usability Interacting" ;};
+		if (index==3){
+					document.getElementById("sel").innerHTML="Selected: Import/Export" ;};
+		if (index==4){
+					document.getElementById("sel").innerHTML="Selected: I dont know yet" ;};
+	};
+	
+</script>
+
+</html>
