@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+ <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+ <link rel="stylesheet" href="Leaflet.Geonames-master/L.Control.Geonames.css" />
+ <link rel="stylesheet" href="font-awesome-4.4.0/css/font-awesome.min.css" />
+
+ 
+ <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+ <script src="Leaflet.Geonames-master/L.Control.Geonames.min.js"></script>
+ 
+ 
+<title> session 5 </title>
+</head>
+
+<body>
+</body>
+
+
+
+
+<div id="map" 
+style="position: absolute; top: 50px; left:50px; bottom:50px; right: 300px"></div>
+
+
+<script>
+	var map = L.map("map").setView([51.959264, 7.625857], 12);
+	
+	// OSM layer
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(self.map);
+		
+	var marker = L.marker([51.963549, 7.613166]).addTo(map);
+	
+	marker.bindPopup("WWU");
+	
+	var control = L.control.geonames({
+		username: "mojio",  // Geonames account username.  Must be provided
+		zoomLevel: null,  // Max zoom level to zoom to for location.  If null, will use the map's max zoom level.
+		maxresults: 5,  // Maximum number of results to display per search
+		className: "fa fa-crosshairs",  // class for icon
+		workingClass: "fa-spin",  // class for search underway
+		featureClasses: ["A", "H", "L", "P", "R", "T", "U", "V"],  // feature classes to search against.  See: http://www.geonames.org/export/codes.html
+		baseQuery: "isNameRequired=true",  // The core query sent to GeoNames, later combined with other parameters above
+		position: "topleft"
+	});
+	
+	map.addControl(control);
+	
+	// Aasee polygon:
+	var geojsonFeature =
+	{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#000daa",
+        "stroke-width": 2,
+        "stroke-opacity": 1,
+        "fill": "#4a4aff",
+        "fill-opacity": 0.5
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              7.614040374755859,
+              51.95767515741864
+            ],
+            [
+              7.617645263671875,
+              51.95730490771255
+            ],
+            [
+              7.617902755737305,
+              51.95645861118805
+            ],
+            [
+              7.614984512329102,
+              51.9549246580198
+            ],
+            [
+              7.6123666763305655,
+              51.954184110120785
+            ],
+            [
+              7.610521316528319,
+              51.95349644754845
+            ],
+            [
+              7.60751724243164,
+              51.9515656462595
+            ],
+            [
+              7.60575771331787,
+              51.95003152569238
+            ],
+            [
+              7.597217559814453,
+              51.94267759844991
+            ],
+            [
+              7.59429931640625,
+              51.94204267049116
+            ],
+            [
+              7.59429931640625,
+              51.943206698217125
+            ],
+            [
+              7.596530914306641,
+              51.94542884908865
+            ],
+            [
+              7.596874237060546,
+              51.94616954158169
+            ],
+            [
+              7.595329284667969,
+              51.94616954158169
+            ],
+            [
+              7.595329284667969,
+              51.94701603231012
+            ],
+            [
+              7.59807586669922,
+              51.94712184252786
+            ],
+            [
+              7.600650787353515,
+              51.948497352642
+            ],
+            [
+              7.604942321777345,
+              51.951354046542924
+            ],
+            [
+              7.606401443481445,
+              51.95270297762941
+            ],
+            [
+              7.606358528137207,
+              51.95333775468791
+            ],
+            [
+              7.606379985809327,
+              51.953456774385984
+            ],
+            [
+              7.606766223907471,
+              51.95362869116987
+            ],
+            [
+              7.608611583709717,
+              51.95411798917787
+            ],
+            [
+              7.609212398529052,
+              51.95446181701624
+            ],
+            [
+              7.60979175567627,
+              51.95487176214693
+            ],
+            [
+              7.610800266265869,
+              51.95581065461393
+            ],
+            [
+              7.614083290100098,
+              51.957807388715544
+            ],
+            [
+              7.614040374755859,
+              51.95767515741864
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+};
+	L.geoJson(geojsonFeature).addTo(map);
+		
+</script>
+
+
+</html>
