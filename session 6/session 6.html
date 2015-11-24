@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"; charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Hands-On Session 6</title>
+	
+</head>
+
+<link href="jquery-ui-1.11.4.custom/jquery-ui.css" rel="stylesheet">
+<link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
+<script src="jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+<body>
+	<!-- Navigation Bar -->
+    <nav class="navbar navbar-inverse">
+        <div class="container-fuid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="" id="date"></a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav"
+                    <li></li>
+                    <li><a href="">Home</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav> 
+    
+    <!-- Success Alert after Submission-->
+ 	<div id="alert" class="alert alert-success" hidden>
+    	<strong> Success! </strong> Form submitted succesfully.
+        <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    </div>
+    
+    <!-- Headlines and Information-->
+    <div class="container">
+        <h1> Course: An Introduction to JavaScript and Linked Data</h1>
+        <h2> Semester: Winter Semester 2015/2016</h2>
+	
+    
+    	<p>When? Every Wednesday</p>
+        <p>Where? Institute for Geoinformatics</p>
+        <p>Where (more precisely)? GEO 1, 3rd floor, Room 323</p>
+        <p> Location on Google Maps: <a href="https://www.google.de/maps/place/GEO+1,+Heisenbergstra%C3%9Fe+2,+48149+M%C3%BCnster/@51.9689517,7.5937545,17z/data=!3m1!4b1!4m2!3m1!1s0x47b9ba9f3f04a49f:0x3f84bac907101f6c"> View here </a> </p>
+        <p>Course Language: English </p>
+        
+        <!-- Begin Formular -->
+        <div class="container-fluid">
+    		<fieldset>
+        	<legend>Some information about me: </legend>
+            
+            <!-- Form Username and Password -->
+         	<div class="form-group">
+          		<label for="usr">Name:</label>
+          		<input type="text" class="form-control" id="usr">
+        	</div>
+        	<div class="form-group">
+          		<label for="pwd">Password:</label>
+          		<input type="password" class="form-control" id="pwd">
+        	</div>
+            
+            <!-- Form radio buttons-->
+        	<div class="container">
+  				<h4>Target degree:</h4>
+  				<form role="form">
+    				<label class="radio-inline">
+      					<input type="radio" name="optradio">Bachelor
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="optradio">Master
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="optradio">PhD
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="optradio">None of these
+                    </label>
+                </form>
+			</div>
+            <br />
+            
+			<!-- Form Checkboxes -->
+            <div class="container">
+                <h4>Why I've decided to study Geoinformatics:</h4>
+                <form role="form">
+                    <label class="checkbox">
+                        <input type="checkbox" value="">I'm interested in everything that is related to geography
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="">I'm interested in everything that is related to informatics
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" value="">I like to study
+                    </label>
+                </form>
+            </div>
+
+			<!-- Form Submit and OpenModal Button -->
+            <div class="container">
+                <button type="button" class="btn btn-primary" onclick="btn_submit()">Submit</button>
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Open Modal</button>
+    		</div>
+	
+     
+    	</fieldset>
+    </div>  
+    <!-- End Formular -->
+    
+     
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+    
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Great that you've opened me!</h4>
+                </div>
+                <div class="modal-body">
+                    <p>I'm a small modal. If you want to close me, click on close (below) or on X at the top right of the window.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+      
+        </div>
+    </div>
+ 
+ 
+    
+</body>
+
+	
+<script>
+	// retrieve current System date and show it in the navigation bar:
+	var today = new Date();
+	document.getElementById('date').innerHTML=today;
+	
+	// called, when submit button is clicked:
+	function btn_submit() {
+		$("#alert").show(1000);
+		setTimeout(function() { $("#alert").fadeOut(1000); }, 5000);
+	}
+	
+</script>
+
+</html>
