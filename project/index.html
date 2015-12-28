@@ -1,0 +1,703 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+
+<style type="text/css">
+	
+	html, body { 
+        height:100%
+    }
+    #map, #mapbottom {
+        height:100%;
+        border: 2px dashed black;
+    }	  
+	#bodytopcontainer {
+		height:70%;
+		padding-bottom:50px;
+	}
+	#bodycontainerbottom{
+		height:55%;
+	}
+	#mapcontainer, #mapcontainerbottom {
+		height: 100%;
+	}
+	.timeContainerAbsolute .slider-track-high{
+		background:lightblue;
+	}
+	
+	
+</style>
+
+
+<link href="bootstrap-slider-master/dependencies/css/bootstrap.min.css" rel="stylesheet">
+<link href="bootstrap-slider-master/css/bootstrap-slider.css" rel="stylesheet">
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+<link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css" />
+
+
+<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+<script type='text/javascript' src="bootstrap-slider-master/dependencies/js/jquery.min.js"></script>
+<script type='text/javascript' src="bootstrap-slider-master/js/bootstrap-slider.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="Chart.js-2.0.0-beta/Chart.js-2.0.0-beta/Chart.js" type="text/javascript"></script>
+
+
+<title>Group 5</title>
+</head>
+
+<body role="document">
+	<!-- Navigation Bar -->
+    <nav class="navbar navbar-inverse">
+        <div class="container-fuid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="" id="date"></a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav"
+                	<li></li>
+                    <li><a href="">Home</a></li>
+                    <li><a href="">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav> 
+    
+    <!-- upper body Container -->
+    <div class="row" id="bodytopcontainer">
+        
+        <!-- Map Container -->
+        <div class="col-md-8  col-xs-12 panel" id="mapcontainer">
+            <div id="map">	</div>
+        </div>
+        
+        <!-- User Interface Container -->
+        <div class="col-md-4  col-xs-12 panel" id="UIcontainer">
+       		<div class="panel panel-default">
+                <div class="panel-heading">
+                	<h3> Data option: </h3>
+                </div>
+        
+                <!-- Selector: District or Subdistricts -->
+                <div class="form-group">
+                    <label for="sel_topDistrictLevel">Select district level:</label>
+                </div>
+                <div style="margin: 20px 0px 25px 0px;">
+                    <select class="form-control" id="sel_topDistrictLevel" onchange="sel_topDistrictLevel()">
+                        <option>Districts</option>
+                        <option>Sub-districts</option>
+                     </select>
+                </div>
+                
+                <!-- Selector: Total, Male, Female, German, non-German, or  <25years -->
+                <div class="form-group">
+                    <label for="sel_topCategory">Select data category: </label>
+                </div>
+                <div style="margin: 20px 0px 25px 0px;">
+                    <select class="form-control" id="sel_topCategory" onchange="sel_topCategory()">
+                        <option>Total</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>German</option>
+                        <option>non-German</option>
+                        <option>younger than 25 years</option>
+                     </select>
+                </div>
+                
+                <div>
+                    <!-- Radio Buttons: show absolute values OR show changes -->
+                    <div class="container">
+                        <label for="sel_top_abs_rel">Show...</label>
+                        <form role="form" id="sel_top_abs_rel" style="margin: 0px 0px 0px 30px;">
+                            <label class="radio">
+                                <input type="radio" name="optradio" onclick="timeAbsolute()" checked="checked">...absolute values
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="optradio" onclick="timeRelative()" >...changes between 2 years
+                            </label>
+                        </form>
+                    </div>
+                    
+                    <!-- Timeline Selector(s): only one is shown at a time -->
+                    <div id="timeContainerAbsolute" style="margin: 50px 0px 25px 30px;">
+                         <input id="sliderABS" /> <!-- absolute timeline: 1 from {2010,2011,2012,2013,2014}-->
+                    </div>
+                    <div id="timeContainerRelative" style="margin: 50px 0px 25px 30px;">
+                         <input id="sliderREL" /> <!-- relative changes: 2 non-equal from {2010,2011,2012,2013,2014}-->
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+    
+    <!-- lower body container -->
+    <div class="row" id="bodycontainerbottom">
+    
+        <!-- Map Container Bottom-->
+        <div class="col-md-5  col-xs-12 panel" id="mapcontainerbottom">
+            <div id="mapbottom">	</div>
+        </div>
+        
+        <!-- User Interface Container Bottom -->
+        <div class="col-md-2  col-xs-12 panel" id="UIcontainerbottom">
+        	<div class="panel panel-default">
+                <div class="panel-heading">
+                	<h4> Comparison option: </h4>
+                </div>
+        
+                <!-- Selector: District or Subdistricts -->
+                <div class="form-group">
+                    <label for="sel_botDistrictLevel">Select district level:</label>
+                </div>
+                <div style="margin: 20px 0px 25px 0px;">
+                    <select class="form-control" id="sel_botDistrictLevel" onchange="sel_botDistrictLevel()">
+                        <option onclick="show_districts()">Districts</option>
+                        <option onclick="show_subdistricts()">Sub-districts</option>
+                     </select>
+                </div>
+                
+                <!-- Selector: Selection of Districts -->
+                <div id="sel_dis">
+                    <div class="form-group"> 
+                        <label for="sel_botDistricts">Select districts by clicking on them at the map or select them from the list below: </label>
+                    </div>
+                    <div style="margin: 20px 0px 25px 0px;" >
+                        <select multiple class="form-control" id="sel_botDistricts" onchange="sel_botDistricts()">
+                            <option>Mitte</option>
+                            <option>West</option>
+                            <option>Nord</option>
+                            <option>Ost</option>
+                            <option>Südost</option>
+                            <option>Hiltrup</option>
+                            <option>unknown</option>
+                         </select>
+                    </div>
+                </div>
+                
+                <!-- Selector: Selection of Subdistricts -->
+                <div id="sel_subdis">
+                    <div class="form-group"> 
+                        <label for="sel_botSubdistricts">Select subdistricts by clicking on them at the map or select them from the list below: </label>
+                    </div>
+                    <div style="margin: 20px 0px 25px 0px;">
+                        <select multiple class="form-control" id="sel_botSubdistricts" onchange="sel_botSubdistricts()">
+                            <option>Aegidii</option>
+                            <option>Ueberwasser</option>
+                            <option>Dom</option>
+                            <option>Buddenturm</option>
+                            <option>Martini</option>
+                            <option>Pluggendorf</option>
+                            <option>hi, lolz</option>
+                            <option>unknown</option>
+                         </select>
+                    </div>
+                </div>
+                
+                <!-- Selector: Total, Male, Female, German, non-German, or  <25years -->
+                <div class="form-group">
+                    <label for="sel_botCategory">Select data category: </label>
+                </div>
+                <div style="margin: 20px 0px 25px 0px;">
+                    <select class="form-control" id="sel_botCategory" onchange="sel_botCategory()">
+                        <option>Total</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>German</option>
+                        <option>non-German</option>
+                        <option>younger than 25 years</option>
+                     </select>
+                </div>
+            </div>
+            
+            
+        </div>
+        
+        <!-- detailChart -->
+        <div class="col-md-5 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 id="diagram_title_dis"> Districts in comparison:</h3>
+                    <h3 hidden id="diagram_title_subdis"> Subdistricts in comparison: </h3>
+                </div>
+                <canvas id="myChart"></canvas>
+                <div id="legend">
+                </div>
+
+            </div>
+        </div>
+    
+    </div>
+
+</body>
+
+<script>
+	
+	var data = {
+		labels: ["2010", "2011", "2012", "2013", "2014"],
+		datasets: [
+			{
+				label: "Example data Aegidii",
+				fill: false,
+				backgroundColor: "rgba(70,70,220,0.2)",
+				borderColor: "rgba(70,70,220,1)",
+				pointBorderColor: "rgba(70,70,220,1)",
+				pointBackgroundColor: "#fff",
+				pointBorderWidth: 1,
+				pointHoverRadius: 5,
+				pointHoverBackgroundColor: "rgba(70,70,220,1)",
+				pointHoverBorderColor: "rgba(70,70,220,1)",
+				pointHoverBorderWidth: 2,
+				data: [65, 59, 80, 81, 56]
+			},
+			{
+				label: "Example data Ueberwasser",
+				fill: false,
+				backgroundColor: "rgba(70,220,60,0.2)",
+				borderColor: "rgba(70,220,60,1)",
+				pointBorderColor: "rgba(70,220,60,1)",
+				pointBackgroundColor: "#fff",
+				pointBorderWidth: 1,
+				pointHoverRadius: 5,
+				pointHoverBackgroundColor: "rgba(70,220,60,1)",
+				pointHoverBorderColor: "rgba(70,220,60,1)",
+				pointHoverBorderWidth: 2,
+				data: [-30, 48, 40, 19, 86]
+			},
+			{
+				label: "Example data Buddenturm",
+				fill: false,
+				backgroundColor: "rgba(220,70,70,0.2)",
+				borderColor: "rgba(220,70,70,1)",
+				pointBorderColor: "rgba(220,70,70,1)",
+				pointBackgroundColor: "#fff",
+				pointBorderWidth: 1,
+				pointHoverRadius: 5,
+				pointHoverBackgroundColor: "rgba(220,70,70,1)",
+				pointHoverBorderColor: "rgba(220,70,70,1)",
+				pointHoverBorderWidth: 2,
+				data: [61, 28, 46, 39, 53]
+			}
+			
+		]
+	};
+	
+	
+	// Get the context of the canvas element we want to select
+	var ctx = document.getElementById("myChart").getContext("2d");
+	var myLineChart = new Chart(ctx, { type: 'line', data:data, options: {}});
+	document.getElementById("legend").innerHTML = myLineChart.generateLegend();
+
+</script>
+
+<!-- The following Script handles the triggers of the Top map User interfaces and updates the top map visualization -->
+<script>
+
+	window.onload = initialise;
+	
+	/**
+	* initialise() sets up the default starting selection when the website in loaded.
+	*/
+	function initialise(){
+		topDataSelection$districtLevel = "districts";
+		topDataSelection$category = "total";
+		topDataSelection$dependency = "absolute";
+		topDataSelection$year = 2012;
+		topDataSelection$startingYear = 2010;
+		topDataSelection$endingYear = 2012;
+		updateTopMap();
+		botDataSelection$districtLevel = "districts";
+		botDataSelection$category = "total";
+		botDataSelection$comparedDistricts = [];
+		botDataSelection$comparedSubdistricts = [];
+		updateBotMap();
+	}
+	
+	/**
+	*  updateTopMap() updates the top map visualization regarding to the chances of the user's selection:
+	*/
+	function updateTopMap(){
+		// TODO: Update the map
+		if (topDataSelection$dependency == "absolute") {
+			console.log("Selected Data for top map:"+topDataSelection$districtLevel+" "+topDataSelection$category+" "+topDataSelection$dependency+" "+topDataSelection$year);} else {
+			console.log("Selected Data for top map:"+topDataSelection$districtLevel+" "+topDataSelection$category+" "+topDataSelection$dependency+" "+topDataSelection$startingYear+"-"+topDataSelection$endingYear);}
+	}
+
+	// Top Container UI Category Selector:
+	function sel_topCategory(){
+		var index = document.getElementById("sel_topCategory").selectedIndex;
+		// TODO: Show selected category data
+		if (index==0){
+			topDataSelection$category = "total";
+		};
+		if (index==1){
+			topDataSelection$category = "male";
+		};
+		if (index==2){
+			topDataSelection$category = "female";
+		};
+		if (index==3){
+			topDataSelection$category = "german";
+		};
+		if (index==4){
+			topDataSelection$category = "non-german";
+		};
+		if (index==5){
+			topDataSelection$category = "younger25";
+		};
+		updateTopMap();
+	}
+
+	// Top Container UI District Level Selector:
+	function sel_topDistrictLevel(){
+		var index = document.getElementById("sel_topDistrictLevel").selectedIndex;
+		if (index==0){
+			topDataSelection$districtLevel = "districts";
+		};
+		if (index==1){
+			topDataSelection$districtLevel = "subdistricts";
+		};
+		updateTopMap();
+	};	
+	
+	// Absolute Values selected.
+	function timeAbsolute(){
+		var dependencyBefore = topDataSelection$dependency;
+		$("#timeContainerAbsolute").show();
+		$("#timeContainerRelative").hide();
+		topDataSelection$dependency = "absolute";
+		if (dependencyBefore!=topDataSelection$dependency) { updateTopMap(); }
+	}
+	
+	// Relative Values selected.
+	function timeRelative(){
+		var dependencyBefore = topDataSelection$dependency;
+		$("#timeContainerAbsolute").hide();
+		$("#timeContainerRelative").show();
+		topDataSelection$dependency = "relative";
+		if (dependencyBefore!=topDataSelection$dependency) { updateTopMap(); }
+	}
+
+	// Timeslider for absolute values: third party bootstrap input fields:
+	var sliderABS = new Slider("input#sliderABS", {
+		value: 2012,
+	  	ticks: [2010,2011,2012,2013,2014],
+		ticks_labels: ['2010', '2011', '2012', '2013', '2014']
+	});
+	
+	// Select a certain year while showing absolute numbers:
+	sliderABS.on("change", function(){
+		topDataSelection$year = sliderABS.getValue();
+		updateTopMap();
+	});
+	
+	// Timeslider for relative changes: third party bootstrap input fields:
+	var sliderREL = new Slider("input#sliderREL", {
+		range:true,
+		value: [2010,2012],
+	  	ticks: [2010,2011,2012,2013,2014],
+		ticks_labels: ['2010', '2011', '2012', '2013', '2014']
+	});
+	
+	// Select a certain start- and ending-year while showing relative changes:
+	sliderREL.on("change", function(){
+		var startBefore = topDataSelection$startingYear;
+		var endingBefore = topDataSelection$endingYear;
+		
+		topDataSelection$startingYear = sliderREL.getValue()[0];
+		topDataSelection$endingYear = sliderREL.getValue()[1];
+		
+		if ((startBefore != topDataSelection$startingYear) || (endingBefore != topDataSelection$endingYear)) {
+			updateTopMap();
+		}
+	});
+
+</script>
+
+<!-- The following Script handles the triggers of the Bottom map User interfaces and updates the bottom map visualization -->
+<script>
+	
+	/**
+	*  updateBotMap() updates the top map visualization regarding to the chances of the user's selection:
+	*/
+	function updateBotMap(){
+		// TODO: Update the map
+		if (botDataSelection$districtLevel=="districts") {
+			console.log("Selected Data for bot map:"+botDataSelection$districtLevel+" "+botDataSelection$category+" "+botDataSelection$comparedDistricts);}
+		else {
+			console.log("Selected Data for bot map:"+botDataSelection$districtLevel+" "+botDataSelection$category+" "+botDataSelection$comparedSubdistricts);}
+	}
+	
+	// bot Container UI Category Selector:
+	function sel_botCategory(){
+		var index = document.getElementById("sel_botCategory").selectedIndex;
+		if (index==0){
+			botDataSelection$category = "total";
+		};
+		if (index==1){
+			botDataSelection$category = "male";
+		};
+		if (index==2){
+			botDataSelection$category = "female";
+		};
+		if (index==3){
+			botDataSelection$category = "german";
+		};
+		if (index==4){
+			botDataSelection$category = "non-german";
+		};
+		if (index==5){
+			botDataSelection$category = "younger25";
+		};
+		updateBotMap();
+	}
+
+	// bot Container UI District Level Selector:
+	function sel_botDistrictLevel(){
+		var index = document.getElementById("sel_botDistrictLevel").selectedIndex;
+		if (index==0){
+			botDataSelection$districtLevel = "districts";
+			$("#diagram_title_dis").show();
+			$("#diagram_title_subdis").hide();
+		};
+		if (index==1){
+			botDataSelection$districtLevel = "subdistricts";
+			$("#diagram_title_dis").hide();
+			$("#diagram_title_subdis").show();
+		};
+		updateBotMap();
+	};
+
+	// Show only the selection for districts:
+	function show_districts(){
+		$("#sel_dis").show();
+		$("#sel_subdis").hide();
+	}
+	
+	// Show only the selection for subdistricts:
+	function show_subdistricts(){
+		$("#sel_dis").hide();
+		$("#sel_subdis").show();
+	}
+	
+	// Selecting districts to compare them (add a district by clicking instead of ctrl+clicking on it):
+	$("#sel_botDistricts").mousedown(function(e){
+		e.preventDefault();
+		var scroll = this.scrollTop;
+		e.target.selected = !e.target.selected;
+		this.scrollTop = scroll;
+		$(this).focus();
+		sel_botDistricts();
+	}).mousemove(function(e){e.preventDefault()});
+	
+	// Change Selection information 
+	function sel_botDistricts(){
+		var result = [];
+		var selector = document.getElementById("sel_botDistricts");
+		var options = selector && selector.options;
+		for (var i=0, iLen = options.length; i<iLen; i++){
+			opt = options[i];
+			if (opt.selected) {
+				result.push(opt.value || opt.text);
+			}
+		}
+		botDataSelection$comparedDistricts = result;
+		updateBotMap();
+	}
+	
+	// Selecting districts to compare them (add a district by clicking instead of ctrl+clicking on it):
+	$("#sel_botSubdistricts").mousedown(function(e){
+		e.preventDefault();
+		var scroll = this.scrollTop;
+		e.target.selected = !e.target.selected;
+		this.scrollTop = scroll;
+		$(this).focus();
+		sel_botSubdistricts();
+	}).mousemove(function(e){e.preventDefault()});
+	
+	// Change Selection information
+	function sel_botSubdistricts(){
+		var result = [];
+		var selector = document.getElementById("sel_botSubdistricts");
+		var options = selector && selector.options;
+		for (var i=0, iLen = options.length; i<iLen; i++){
+			opt = options[i];
+			if (opt.selected) {
+				result.push(opt.value || opt.text);
+			}
+		}
+		botDataSelection$comparedSubdistricts = result;
+		updateBotMap();
+	}
+
+</script>
+
+
+<script>
+
+	bounds = new L.LatLngBounds(new L.LatLng(51.815922, 7.314666), new L.LatLng(52.153459, 8.042863));
+	
+	var map = L.map("map").setView([51.959264, 7.625857], 12).setMaxBounds(bounds);
+	var map_bottom = L.map("mapbottom").setView([51.959264, 7.625857], 12).setMaxBounds(bounds);
+	map.setZoom(map.getBoundsZoom(bounds,true));
+	map_bottom.setZoom(map.getBoundsZoom(bounds,true));
+	
+	// OSM layer
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(self.map);
+	// OSM layer
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(self.map_bottom);
+		
+	//var marker = L.marker([51.963549, 7.613166]).addTo(map);
+	
+	//marker.bindPopup("WWU");
+	
+	// Aasee polygon:
+	var geojsonFeature =
+	{
+	  	"type": "FeatureCollection",
+	  	"features": [
+    {
+		"type": "Feature",
+		"properties": {
+			"stroke": "#000daa",
+			"stroke-width": 2,
+			"stroke-opacity": 1,
+			"fill": "#4a4aff",
+			"fill-opacity": 0.5
+      	},
+      	"geometry": {
+			"type": "Polygon",
+			"coordinates": [
+          		[
+					[
+						  7.614040374755859,
+						  51.95767515741864
+					],
+					[
+						  7.617645263671875,
+						  51.95730490771255
+					],
+					[
+						  7.617902755737305,
+						  51.95645861118805
+					],
+					[
+						  7.614984512329102,
+						  51.9549246580198
+					],
+					[
+						  7.6123666763305655,
+						  51.954184110120785
+					],
+					[
+						  7.610521316528319,
+						  51.95349644754845
+					],
+					[
+						  7.60751724243164,
+						  51.9515656462595
+					],
+					[
+						  7.60575771331787,
+						  51.95003152569238
+					],
+					[
+						  7.597217559814453,
+						  51.94267759844991
+					],
+					[
+						  7.59429931640625,
+						  51.94204267049116
+					],
+					[
+						  7.59429931640625,
+						  51.943206698217125
+					],
+					[
+						  7.596530914306641,
+						  51.94542884908865
+					],
+					[
+						  7.596874237060546,
+						  51.94616954158169
+					],
+					[
+						  7.595329284667969,
+						  51.94616954158169
+					],
+					[
+						  7.595329284667969,
+						  51.94701603231012
+					],
+					[
+						  7.59807586669922,
+						  51.94712184252786
+					],
+					[
+						  7.600650787353515,
+						  51.948497352642
+					],
+					[
+						  7.604942321777345,
+						  51.951354046542924
+					],
+					[
+						  7.606401443481445,
+						  51.95270297762941
+					],
+					[
+						  7.606358528137207,
+						  51.95333775468791
+					],
+					[
+						  7.606379985809327,
+						  51.953456774385984
+					],
+					[
+						  7.606766223907471,
+						  51.95362869116987
+					],
+					[
+						  7.608611583709717,
+						  51.95411798917787
+					],
+					[
+						  7.609212398529052,
+						  51.95446181701624
+					],
+					[
+						  7.60979175567627,
+						  51.95487176214693
+					],
+					[
+						  7.610800266265869,
+						  51.95581065461393
+					],
+					[
+						  7.614083290100098,
+						  51.957807388715544
+					],
+					[
+						  7.614040374755859,
+						  51.95767515741864
+					]
+			  ]
+	]}}]};
+	
+	L.geoJson(geojsonFeature).addTo(map);
+	
+	$("#timeContainerRelative").hide();
+	$("#sel_subdis").hide();
+	
+</script>
+
+
+</html>
