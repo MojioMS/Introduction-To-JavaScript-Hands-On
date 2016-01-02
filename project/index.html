@@ -11,35 +11,62 @@
 	html, body { 
         height:100%
     }
-    #map, #mapbottom {
+    #map {
+        height:80%;
+        border: 2px dashed black;
+    }	  
+	#mapbottom {
         height:100%;
         border: 2px dashed black;
     }	  
 	#bodytopcontainer {
-		height:70%;
-		padding-bottom:50px;
+		height:100%;
+		padding-bottom: 20px;
 	}
 	#bodycontainerbottom{
-		height:55%;
+		height:66%;
 	}
-	#mapcontainer, #mapcontainerbottom {
-		height: 100%;
+	#mapcontainer {
+		height: 90%;
+	}
+	#mapcontainerbottom {
+		height: 85%;
 	}
 	.timeContainerAbsolute .slider-track-high{
 		background:lightblue;
 	}
-	.info {
-		padding: 6px 8px;
+	.info-box {
+		padding: 5px 5px;
 		font: 14px/16px Arial, Helvetica, sans-serif;
 		background: white;
 		background: rgba(255,255,255,0.8);
-		box-shadow: 0 0 15px rgba(0,0,0,0.2);
 		border-radius: 5px;
 	}
 	.info h4 {
 		margin: 0 0 5px;
 		color: #777;
+	}#legend-top {
+		position: relative;
+	}#legend-top-max {
+		position: absolute;
+		right: 0;
+	}#legend-top-min {
+		position: absolute;
+		left: 0;
+	}#legend-top-mid {
+		position: absolute;
+		left: 48%;
 	}
+/**
+	.legend {
+		line-height: 18px;
+		color: #555;
+	}
+	.legend i {
+		float: left;
+		margin-right: 8px;
+		opacity: 0.7;
+	}*/
 	
 	
 </style>
@@ -64,7 +91,6 @@
 <body role="document">
 	<!-- Navigation Bar -->
     <nav class="navbar navbar-inverse">
-        <div class="container-fuid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="" id="date"></a>
             </div>
@@ -73,22 +99,31 @@
                 	<li></li>
                     <li><a href="">Home</a></li>
                     <li><a href="">About</a></li>
+                    <li><a href="">License Information</a></li>
+                    <li><a href="">Tutorial</a></li>
                 </ul>
-            </div>
         </div>
     </nav> 
-    
+   
+    <div class="container col-md-5 col-xs-12" id="info-box"><h4>Total employees subject to social insurance contributions in 2012</h4><br /><b>Hover over a district '</b>);</div>
+    <div class="container col-md-3 col-xs-12" id="legend-top" style="height:10%; width:"screen.witdh>
+    	<img src="pictures/legend_top_relative.png" style="height:50%; width:100%; opacity:0.7; border:1px solid #333" id="img_legend">
+        <p id="legend-top-max"> maximum </p>
+        <p id="legend-top-mid"> middle </p>
+        <p id="legend-top-min"> 0 </p>
+    </div>
+    <div class="col-md-5"></div>
     <!-- upper body Container -->
     <div class="row" id="bodytopcontainer">
         
         <!-- Map Container -->
-        <div class="col-md-8  col-xs-12 panel" id="mapcontainer">
-            <div id="map">	</div>
+        <div class="panel panel-default col-md-8 col-xs-12" id="mapcontainer">
+        	<div class="panel-default" style="height:100%">
+            	<div id="map">	</div>
+            </div>
         </div>
-        
         <!-- User Interface Container -->
-        <div class="col-md-4  col-xs-12 panel" id="UIcontainer">
-       		<div class="panel panel-default">
+        <div class="panel panel-info col-md-4 col-xs-12" id="UIcontainer">
                 <div class="panel-heading">
                 	<h3> Data option: </h3>
                 </div>
@@ -104,7 +139,7 @@
                      </select>
                 </div>
                 
-                <!-- Selector: Total, Male, Female, German, non-German, or  <25years -->
+                <!-- Selector: Total, Male, Female, German, non-german, or  <25years -->
                 <div class="form-group">
                     <label for="sel_topCategory">Select data category: </label>
                 </div>
@@ -114,7 +149,7 @@
                         <option>Male</option>
                         <option>Female</option>
                         <option>German</option>
-                        <option>non-German</option>
+                        <option>non-german</option>
                         <option>younger than 25 years</option>
                      </select>
                 </div>
@@ -128,7 +163,7 @@
                                 <input type="radio" name="optradio" onclick="timeAbsolute()" checked="checked">...absolute values
                             </label>
                             <label class="radio">
-                                <input type="radio" name="optradio" onclick="timeRelative()" >...changes between 2 years
+                                <input type="radio" name="optradio" onclick="timeRelative()" >...changes in years
                             </label>
                         </form>
                     </div>
@@ -141,97 +176,95 @@
                          <input id="sliderREL" /> <!-- relative changes: 2 non-equal from {2010,2011,2012,2013,2014}-->
                     </div>
                 </div>
-            </div>
             
             
         </div>
     </div>
     
     <!-- lower body container -->
-    <div class="row" id="bodycontainerbottom">
-    
+    <div class="row" style="height: 100%">
+    	<div class="col-md-12 col-xs-12 panel panel-primary" id="bodycontainerbottom">
+                <div class="panel-heading">
+                	<h3> District and Subdistrict Comparision </h3>
+                </div>
         <!-- Map Container Bottom-->
-        <div class="col-md-5  col-xs-12 panel" id="mapcontainerbottom">
+        <div class="col-md-5  col-xs-12" id="mapcontainerbottom">
             <div id="mapbottom">	</div>
         </div>
         
         <!-- User Interface Container Bottom -->
-        <div class="col-md-2  col-xs-12 panel" id="UIcontainerbottom">
-        	<div class="panel panel-default">
-                <div class="panel-heading">
-                	<h4> Comparison option: </h4>
+        <div class="col-md-2  col-xs-12 panel panel-info" id="UIcontainerbottom">
+            <div class="panel-heading">
+                <h4> Comparison option: </h4>
+            </div>
+    
+            <!-- Selector: District or Subdistricts -->
+            <div class="form-group">
+                <label for="sel_botDistrictLevel">Select district level:</label>
+            </div>
+            <div style="margin: 20px 0px 25px 0px;">
+                <select class="form-control" id="sel_botDistrictLevel" onchange="sel_botDistrictLevel()">
+                    <option onclick="show_districts()">Districts</option>
+                    <option onclick="show_subdistricts()">Sub-districts</option>
+                 </select>
+            </div>
+            
+            <!-- Selector: Selection of Districts -->
+            <div id="sel_dis">
+                <div class="form-group"> 
+                    <label for="sel_botDistricts">Select districts by clicking on them at the map or select them from the list below: </label>
                 </div>
-        
-                <!-- Selector: District or Subdistricts -->
-                <div class="form-group">
-                    <label for="sel_botDistrictLevel">Select district level:</label>
-                </div>
-                <div style="margin: 20px 0px 25px 0px;">
-                    <select class="form-control" id="sel_botDistrictLevel" onchange="sel_botDistrictLevel()">
-                        <option onclick="show_districts()">Districts</option>
-                        <option onclick="show_subdistricts()">Sub-districts</option>
-                     </select>
-                </div>
-                
-                <!-- Selector: Selection of Districts -->
-                <div id="sel_dis">
-                    <div class="form-group"> 
-                        <label for="sel_botDistricts">Select districts by clicking on them at the map or select them from the list below: </label>
-                    </div>
-                    <div style="margin: 20px 0px 25px 0px;" >
-                        <select multiple class="form-control" id="sel_botDistricts" onchange="sel_botDistricts()">
-                            <option>Mitte</option>
-                            <option>West</option>
-                            <option>Nord</option>
-                            <option>Ost</option>
-                            <option>Südost</option>
-                            <option>Hiltrup</option>
-                            <option>unknown</option>
-                         </select>
-                    </div>
-                </div>
-                
-                <!-- Selector: Selection of Subdistricts -->
-                <div id="sel_subdis">
-                    <div class="form-group"> 
-                        <label for="sel_botSubdistricts">Select subdistricts by clicking on them at the map or select them from the list below: </label>
-                    </div>
-                    <div style="margin: 20px 0px 25px 0px;">
-                        <select multiple class="form-control" id="sel_botSubdistricts" onchange="sel_botSubdistricts()">
-                            <option>Aegidii</option>
-                            <option>Ueberwasser</option>
-                            <option>Dom</option>
-                            <option>Buddenturm</option>
-                            <option>Martini</option>
-                            <option>Pluggendorf</option>
-                            <option>hi, lolz</option>
-                            <option>unknown</option>
-                         </select>
-                    </div>
-                </div>
-                
-                <!-- Selector: Total, Male, Female, German, non-German, or  <25years -->
-                <div class="form-group">
-                    <label for="sel_botCategory">Select data category: </label>
-                </div>
-                <div style="margin: 20px 0px 25px 0px;">
-                    <select class="form-control" id="sel_botCategory" onchange="sel_botCategory()">
-                        <option>Total</option>
-                        <option>Male</option>
-                        <option>Female</option>
-                        <option>German</option>
-                        <option>non-German</option>
-                        <option>younger than 25 years</option>
+                <div style="margin: 20px 0px 25px 0px;" >
+                    <select multiple class="form-control" id="sel_botDistricts" onchange="sel_botDistricts()">
+                        <option>Mitte</option>
+                        <option>West</option>
+                        <option>Nord</option>
+                        <option>Ost</option>
+                        <option>Südost</option>
+                        <option>Hiltrup</option>
+                        <option>unknown</option>
                      </select>
                 </div>
             </div>
             
+            <!-- Selector: Selection of Subdistricts -->
+            <div id="sel_subdis">
+                <div class="form-group"> 
+                    <label for="sel_botSubdistricts">Select subdistricts by clicking on them at the map or select them from the list below: </label>
+                </div>
+                <div style="margin: 20px 0px 25px 0px;">
+                    <select multiple class="form-control" id="sel_botSubdistricts" onchange="sel_botSubdistricts()">
+                        <option>Aegidii</option>
+                        <option>Ueberwasser</option>
+                        <option>Dom</option>
+                        <option>Buddenturm</option>
+                        <option>Martini</option>
+                        <option>Pluggendorf</option>
+                        <option>hi, lolz</option>
+                        <option>unknown</option>
+                     </select>
+                </div>
+            </div>
             
+            <!-- Selector: Total, Male, Female, German, non-german, or  <25years -->
+            <div class="form-group">
+                <label for="sel_botCategory">Select data category: </label>
+            </div>
+            <div style="margin: 20px 0px 25px 0px;">
+                <select class="form-control" id="sel_botCategory" onchange="sel_botCategory()">
+                    <option>Total</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>German</option>
+                    <option>non-german</option>
+                    <option>younger than 25 years</option>
+                 </select>
+            </div>
         </div>
         
         <!-- detailChart -->
-        <div class="col-md-5 col-xs-12">
-            <div class="panel panel-default">
+        <div class="col-md-5 col-xs-12 panel">
+            <div class="panel panel-info">
                 <div class="panel-heading">
                     <h3 id="diagram_title_dis"> Districts in comparison:</h3>
                     <h3 hidden id="diagram_title_subdis"> Subdistricts in comparison: </h3>
@@ -240,8 +273,10 @@
                 <div id="legend">
                 </div>
 
-            </div>
         </div>
+    </div>
+    </div>
+  
     
     </div>
 
@@ -312,19 +347,21 @@
 	window.onload = initialise;
 	
 	var maximum = 2000;
+	var ch_maximum = 0;
+	var ch_minimum = 0;
 	var geoJsonLayer;
 	var drawnFirstTime = true;
+	var topDataSelection$districtLevel = "districts";
+	var	topDataSelection$category = "total";
+	var	topDataSelection$dependency = "absolute";
+	var	topDataSelection$year = 2012;
+	var	topDataSelection$startingYear = 2010;
+	var	topDataSelection$endingYear = 2012;
 	
 	/**
 	* initialise() sets up the default starting selection when the website in loaded.
 	*/
 	function initialise(){
-		topDataSelection$districtLevel = "districts";
-		topDataSelection$category = "total";
-		topDataSelection$dependency = "absolute";
-		topDataSelection$year = 2012;
-		topDataSelection$startingYear = 2010;
-		topDataSelection$endingYear = 2012;
 		updateTopMap();
 		botDataSelection$districtLevel = "districts";
 		botDataSelection$category = "total";
@@ -338,14 +375,16 @@
 	*/
 	function updateTopMap(){
 		// TODO: create passing info for selections and forward to calculateMaximValue() and drawToMap()
-		
-		calculateMaximumValue();
 		if (topDataSelection$dependency == "absolute") {
+			calculateMaximumValue();
 			console.log("Selected Data for top map:"+topDataSelection$districtLevel+" "+topDataSelection$category+" "+topDataSelection$dependency+" "+topDataSelection$year);} else {
+			calculateChanges();
 			console.log("Selected Data for top map:"+topDataSelection$districtLevel+" "+topDataSelection$category+" "+topDataSelection$dependency+" "+topDataSelection$startingYear+"-"+topDataSelection$endingYear);}
 		
 		// TODO: Draw Layer onto map(passing selection information forward):
 		drawTopMapLayer();
+		info.update();
+		//updateLegend();
 	}
 
 	// Top Container UI Category Selector:
@@ -365,7 +404,7 @@
 			topDataSelection$category = "german";
 		};
 		if (index==4){
-			topDataSelection$category = "non-german";
+			topDataSelection$category = "non_german";
 		};
 		if (index==5){
 			topDataSelection$category = "younger25";
@@ -470,7 +509,7 @@
 			botDataSelection$category = "german";
 		};
 		if (index==4){
-			botDataSelection$category = "non-german";
+			botDataSelection$category = "non_german";
 		};
 		if (index==5){
 			botDataSelection$category = "younger25";
@@ -562,7 +601,7 @@
 <script>
 
 	bounds = new L.LatLngBounds(new L.LatLng(51.815922, 7.314666), new L.LatLng(52.153459, 8.042863));
-	
+	var maximum_rounded;
 	var map = L.map("map").setView([51.959264, 7.625857], 12).setMaxBounds(bounds);
 	var map_bottom = L.map("mapbottom").setView([51.959264, 7.625857], 12).setMaxBounds(bounds);
 	map.setZoom(map.getBoundsZoom(bounds,true));
@@ -588,14 +627,25 @@
 	
 	// method that we will use to update the control based on feature properties passed
 	info.update = function (props) {
-		this._div.innerHTML = '<h4>Employees subject to insurance contribution</h4>' +  (props ?
-			'<b>' + props.name + '</b><br />' + props.value + ' employees '
-			: 'Hover over a district');
+		var year = topDataSelection$year - 2010;
+		
+		document.getElementById("info-box").innerHTML = '<h4>' + (topDataSelection$category=="non_german"? "Non-german employees" : (topDataSelection$category=="younger25"? "Employees younger than 25y" : topDataSelection$category.charAt(0).toUpperCase()+ topDataSelection$category.slice(1,topDataSelection$category.length) + ' employees')) + ' subject to social insurance contributions in ' + topDataSelection$year + '</h4>' 	 
+		+ (props ?
+			'<b>' + props.name + '</b><br />' + (topDataSelection$category=="total"? props.total[year] + ' total employees in year ' + (year+2010) 
+						  : (topDataSelection$category=="male"? props.male[year] + ' male employees in year ' + (year+2010) 
+							: (topDataSelection$category=="female"? props.female[year] + ' female employees in year ' + (year+2010) 
+								: (topDataSelection$category=="german"? props.german[year] + ' german employees in year ' + (year+2010) 
+									: (topDataSelection$category=="non_german"? props.non_german[year] + ' non-german employees in year ' + (year+2010)  
+										: props.younger25[year] + ' employees younger than 25 in year ' + (year+2010) 
+									   )
+								   )
+							   )
+							 )
+						)
+			:"<b> Hover over a district </b><br />.");
 	};
 	
-	info.addTo(map);
-	
-	
+	//info.addTo(map);
 	
 	//var marker = L.marker([51.963549, 7.613166]).addTo(map);
 	
@@ -605,30 +655,184 @@
 	}
 	
 	function getColor(value) {
-		var color = rgbToHex(255*(value / maximum),0,0);
+		var color = rgbToHex(0,0,0); // BLACK as indicating an error: will not occur at release ;-)
+		if (topDataSelection$dependency == "absolute") {
+			var year = topDataSelection$year - 2010;
+			var a = value.total[year];
+			switch (topDataSelection$category){
+				case "total": a = value.total[year]; break;
+				case "male" : a = value.male[year]; break;
+				case "female" : a = value.female[year]; break;
+				case "german" : a = value.german[year]; break;
+				case "non_german" : a = value.non_german[year]; break;
+				case "younger25" : a = value.younger25[year]; break;
+			}
+			var b = Math.round(255 - 255 * (a / maximum));
+			color = rgbToHex(b,b,255); 
+		} else {
+			var startYear = topDataSelection$startingYear - 2010;
+			var endYear = topDataSelection$endingYear - 2010;
+			var a = value.total[year];
+			switch (topDataSelection$category){
+				case "total": a = value.total[endYear]/value.total[startYear]-1; break;
+				case "male" : a = value.male[endYear]/value.male[startYear]-1; break;
+				case "female" : a = value.female[endYear]/value.female[startYear]-1; break;
+				case "german" : a = value.german[endYear]/value.german[startYear]-1; break;
+				case "non_german" : a = value.non_german[endYear]/value.non_german[startYear]-1; break;
+				case "younger25" : a = value.younger25[endYear]/value.younger25[startYear]-1; break;
+			}
+			if (a>=0){
+				var b = Math.round(255 - 255 * (a / ch_maximum));
+				color = rgbToHex(b,b,255); 
+			} else {
+				var b = Math.round(255 - 255 * (a / ch_minimum));
+				color = rgbToHex(255,b,b); 
+			}
+		}
 		return color;
 	}
 	
-	function calculateMaximumValue() {
-		maximum = featureCollection.features[0].properties.value;
+	function calculateChanges(){
+		var startYear = topDataSelection$startingYear - 2010;
+		var endYear = topDataSelection$endingYear - 2010;
+		switch (topDataSelection$category){
+			case "total": ch_minimum = ch_maximum = featureCollection.features[0].properties.total[endYear]/featureCollection.features[0].properties.total[startYear]-1; break;
+			case "male" : ch_minimum = ch_maximum = featureCollection.features[0].properties.male[endYear]/featureCollection.features[0].properties.male[startYear]-1; break;
+			case "female" : ch_minimum = ch_maximum = featureCollection.features[0].properties.female[endYear]/featureCollection.features[0].properties.female[startYear]-1; break;
+			case "german" : ch_minimum = ch_maximum = featureCollection.features[0].properties.german[endYear]/featureCollection.features[0].properties.german[startYear]-1; break;
+			case "non_german" : ch_minimum = ch_maximum = featureCollection.features[0].properties.non_german[endYear]/featureCollection.features[0].properties.non_german[startYear]-1; break;
+			case "younger25" : ch_minimum = ch_maximum = featureCollection.features[0].properties.younger25[endYear]/featureCollection.features[0].properties.younger25[startYear]-1; break;
+		}
 		for (var i=1, iLen = featureCollection.features.length; i<iLen; i++){
 			feat = featureCollection.features[i];
-			if (maximum < feat.properties.value){
-				maximum = feat.properties.value;
+			console.log(feat.properties.total[endYear]+", "+feat.properties.total[startYear]+", -1");
+			console.log("change: "+feat.properties.total[endYear]/feat.properties.total[startYear]-1);
+			switch (topDataSelection$category){
+				case "total":
+					if (ch_minimum > feat.properties.total[endYear]/feat.properties.total[startYear]-1){
+						ch_minimum = feat.properties.total[endYear]/feat.properties.total[startYear]-1;
+					}
+					if (ch_maximum < feat.properties.total[endYear]/feat.properties.total[startYear]-1){
+						ch_maximum = feat.properties.total[endYear]/feat.properties.total[startYear]-1;
+					}break;
+				case "male":
+					if (ch_minimum > feat.properties.male[endYear]/feat.properties.male[startYear]-1){
+						ch_minimum = feat.properties.male[endYear]/feat.properties.male[startYear]-1;
+					}
+					if (ch_maximum < feat.properties.male[endYear]/feat.properties.male[startYear]-1){
+						ch_maximum = feat.properties.male[endYear]/feat.properties.male[startYear]-1;
+					}break;
+				case "female":  
+					if (ch_minimum > feat.properties.female[endYear]/feat.properties.female[startYear]-1){
+						ch_minimum = feat.properties.female[endYear]/feat.properties.female[startYear]-1;
+					}
+					if (ch_maximum < feat.properties.female[endYear]/feat.properties.female[startYear]-1){
+						ch_maximum = feat.properties.female[endYear]/feat.properties.female[startYear]-1;
+					}break;
+				case "german":  
+					if (ch_minimum > feat.properties.german[endYear]/feat.properties.german[startYear]-1){
+						ch_minimum = feat.properties.german[endYear]/feat.properties.german[startYear]-1;
+					}
+					if (ch_maximum < feat.properties.german[endYear]/feat.properties.german[startYear]-1){
+						ch_maximum = feat.properties.german[endYear]/feat.properties.german[startYear]-1;
+					}break;
+				case "non_german":  
+					if (ch_minimum > feat.properties.non_german[endYear]/feat.properties.non_german[startYear]-1){
+						ch_minimum = feat.properties.non_german[endYear]/feat.properties.non_german[startYear]-1;
+					}
+					if (ch_maximum < feat.properties.non_german[endYear]/feat.properties.non_german[startYear]-1){
+						ch_maximum = feat.properties.non_german[endYear]/feat.properties.non_german[startYear]-1;
+					}break;
+				case "younger25":  
+					if (ch_minimum > feat.properties.younger25[endYear]/feat.properties.younger25[startYear]-1){
+						ch_minimum = feat.properties.younger25[endYear]/feat.properties.younger25[startYear]-1;
+					}
+					if (ch_maximum < feat.properties.younger25[endYear]/feat.properties.younger25[startYear]-1){
+						ch_maximum = feat.properties.younger25[endYear]/feat.properties.younger25[startYear]-1;
+					}break;
 			}
+			console.log("changes maximum set to: "+ch_maximum);
+			console.log("changes minimum set to: "+ch_minimum);
 		}
-		console.log("maximum set to: "+maximum);
+		maximum_rounded = Math.ceil(ch_maximum*100)/100;
+		minimum_rounded = Math.floor(ch_minimum*100)/100;
+		if (maximum_rounded <= 0) maximum_rounded = "-0";
+		if (minimum_rounded >= 0) minimum_rounded = "-0";
+		
+		document.getElementById("legend-top-max").innerHTML = "+" + maximum_rounded+"%";
+		document.getElementById("legend-top-mid").innerHTML = 0;
+		document.getElementById("legend-top-min").innerHTML = minimum_rounded+"%";
+		document.getElementById("img_legend").src = "pictures/legend_top_relative.png";
 	}
 	
-	// Aasee polygon:
+	function calculateMaximumValue() {
+		var year = topDataSelection$year - 2010;
+		switch (topDataSelection$category){
+			case "total": maximum = featureCollection.features[0].properties.total[year]; break;
+			case "male" : maximum = featureCollection.features[0].properties.male[year]; break;
+			case "female" : maximum = featureCollection.features[0].properties.female[year]; break;
+			case "german" : maximum = featureCollection.features[0].properties.german[year]; break;
+			case "non_german" : maximum = featureCollection.features[0].properties.non_german[year]; break;
+			case "younger25" : maximum = featureCollection.features[0].properties.younger25[year]; break;
+		}
+		for (var i=1, iLen = featureCollection.features.length; i<iLen; i++){
+			feat = featureCollection.features[i];
+			switch (topDataSelection$category){
+				case "total":
+					if (maximum < feat.properties.total[year]){
+						maximum = feat.properties.total[year];
+					}break;
+				case "male":
+					if (maximum < feat.properties.male[year]){
+						maximum = feat.properties.male[year];
+					}break;
+				case "female": 
+					if (maximum < feat.properties.female[year]){
+						maximum = feat.properties.female[year];
+					}break;
+				case "german": 
+					if (maximum < feat.properties.german[year]){
+						maximum = feat.properties.german[year];
+					}break;
+				case "non_german": 
+					if (maximum < feat.properties.non_german[year]){
+						maximum = feat.properties.non_german[year];
+					}break;
+				case "younger25": 
+					if (maximum < feat.properties.younger25[year]){
+						maximum = feat.properties.younger25[year];
+					}break;
+			}
+			
+		}
+		console.log("maximum set to: "+maximum);
+		var digits = maximum.toString().length;
+		maximum_rounded = Math.ceil((maximum%Math.pow(10,digits-1)/Math.pow(10,digits-2)))*Math.pow(10,digits-2) + Math.floor(maximum/Math.pow(10,digits-1))*Math.pow(10,digits-1);
+		console.log(maximum + " gerundet: "+ maximum_rounded);
+		maximum = maximum_rounded;
+		document.getElementById("legend-top-max").innerHTML = maximum_rounded;
+		document.getElementById("legend-top-mid").innerHTML = "";
+		document.getElementById("legend-top-min").innerHTML = 0;
+		document.getElementById("img_legend").src = "pictures/legend_top_absolute.png";
+	}
+	
+	// FeatureCollection containing all subdistricts.
 	var featureCollection = {
 		"type" : "FeatureCollection",
+		"properties": {
+			"districtLevel": "subdistricts"	
+		},
 		"features": [
 		
 			{"type": "Feature",
 			"properties": {
 				"name": "Uppenberg",
-				"value": 1322
+				"total": [2632, 2805, 2823, 2882, 3009],
+				"male": [1322, 1400, 1397, 1438, 1495],
+				"female": [1310, 1405, 1426, 1444, 1514],
+				"german": [2444, 2588, 2620, 2658, 2774],
+				"non_german": [188, 217, 203, 224, 235],
+				"younger25": [215, 307, 293, 264, 294]
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -639,7 +843,12 @@
 			{"type": "Feature",
 			"properties": {
 				"name": "Aaseestadt",
-				"value": 823
+				"total": [1684, 1714, 1728, 1798, 1875],
+				"male": [823, 845, 812, 856, 898],
+				"female": [861, 869, 916, 942, 977],
+				"german": [1523, 1557, 1573, 1634, 1735],
+				"non_german": [161, 157, 155, 164, 140],
+				"younger25": [149, 141, 129, 156, 156]
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -656,14 +865,26 @@
 				return {
 						color: 'white',
 						weight: 2,
-						fillColor: getColor(Feature.properties.value),
+						fillColor: getColor(Feature.properties),
 						dashArray: '3',
 						opacity: 0.8,
 						fillOpacity: 0.5
 					};
-				},
+				}
 		
 	});
+	
+	function getSelectionString(){
+		var result = "";
+		if (topDataSelection$dependency=="relative"){
+			
+		} else 
+		if (topDataSelection$dependency=="absolute"){
+			result = "total[0]";
+		}
+		return result;
+	}
+	
 	
 	function drawTopMapLayer(){
 		if (!drawnFirstTime) {
@@ -674,7 +895,7 @@
 				return {
 						color: 'white',
 						weight: 2,
-						fillColor: getColor(Feature.properties.value),
+						fillColor: window["getColor"](Feature.properties),
 						dashArray: '3',
 						opacity: 0.8,
 						fillOpacity: 0.7
@@ -720,7 +941,6 @@
 			click: zoomToFeature
 		});
 	}
-	
 	
 	$("#timeContainerRelative").hide();
 	$("#sel_subdis").hide();
