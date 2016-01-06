@@ -34,8 +34,20 @@
 	#mapcontainerbottom {
 		height: 85%;
 	}
-	.timeContainerAbsolute .slider-track-high{
+	.timeContainerAbsolute {
 		background:lightblue;
+	}
+	#sliderabs .slider-track-high, #sliderrel .slider-track-high, #sliderrel .slider-track-low {
+		background:yellow;
+	}
+	#sliderabs .slider-selection {
+		background:yellow;
+	}
+	#sliderabs .slider-tick, #sliderrel .slider-tick {
+		background:yellow;
+	}
+	#sliderrel .slider-tick.in-selection{
+		background: lightblue;
 	}
 	.info-box {
 		padding: 5px 5px;
@@ -87,7 +99,7 @@
 <script src="Chart.js-2.0.0-beta/Chart.js-2.0.0-beta/Chart.js" type="text/javascript"></script>
 
 
-<title>Group 5</title>
+<title>Employees</title>
 </head>
 
 <body role="document">
@@ -172,10 +184,10 @@
                     
                     <!-- Timeline Selector(s): only one is shown at a time -->
                     <div id="timeContainerAbsolute" style="margin: 50px 0px 25px 30px;">
-                         <input id="sliderABS" /> <!-- absolute timeline: 1 from {2010,2011,2012,2013,2014}-->
+                         <input id="sliderabs" type="text"/> <!-- absolute timeline: 1 from {2010,2011,2012,2013,2014}-->
                     </div>
                     <div id="timeContainerRelative" style="margin: 50px 0px 25px 30px;">
-                         <input id="sliderREL" /> <!-- relative changes: 2 non-equal from {2010,2011,2012,2013,2014}-->
+                         <input id="sliderrel" type="text"/> <!-- relative changes: 2 non-equal from {2010,2011,2012,2013,2014}-->
                     </div>
                 </div>
             
@@ -439,20 +451,22 @@
 	}
 
 	// Timeslider for absolute values: third party bootstrap input fields:
-	var sliderABS = new Slider("input#sliderABS", {
+	var sliderabs = new Slider("#sliderabs", {
+		id: "sliderabs",
 		value: 2012,
 	  	ticks: [2010,2011,2012,2013,2014],
 		ticks_labels: ['2010', '2011', '2012', '2013', '2014']
 	});
 	
 	// Select a certain year while showing absolute numbers:
-	sliderABS.on("change", function(){
-		topDataSelection$year = sliderABS.getValue();
+	sliderabs.on("change", function(){
+		topDataSelection$year = sliderabs.getValue();
 		updateTopMap();
 	});
 	
 	// Timeslider for relative changes: third party bootstrap input fields:
-	var sliderREL = new Slider("input#sliderREL", {
+	var sliderrel = new Slider("#sliderrel", {
+		id: "sliderrel",
 		range:true,
 		value: [2010,2012],
 	  	ticks: [2010,2011,2012,2013,2014],
@@ -460,17 +474,17 @@
 	});
 	
 	// Select a certain start- and ending-year while showing relative changes:
-	sliderREL.on("change", function(){
+	sliderrel.on("change", function(){
 		var startBefore = topDataSelection$startingYear;
 		var endingBefore = topDataSelection$endingYear;
 
-		if (sliderREL.getValue()[0] == sliderREL.getValue()[1]) {
-			console.log("SLIDER SAME VALUE: " + sliderREL.getValue()[0]);
-			sliderREL.setValue([startBefore, startBefore+1]);
-			sliderREL._mouseup();
+		if (sliderrel.getValue()[0] == sliderrel.getValue()[1]) {
+			console.log("SLIDER SAME VALUE: " + sliderrel.getValue()[0]);
+			sliderrel.setValue([startBefore, startBefore+1]);
+			sliderrel._mouseup();
 		}
-		topDataSelection$startingYear = sliderREL.getValue()[0];
-		topDataSelection$endingYear = sliderREL.getValue()[1];
+		topDataSelection$startingYear = sliderrel.getValue()[0];
+		topDataSelection$endingYear = sliderrel.getValue()[1];
 		if ((startBefore != topDataSelection$startingYear) || (endingBefore != topDataSelection$endingYear)) {
 			updateTopMap();
 		}
@@ -486,12 +500,11 @@
 	*/
 	function updateBotMap(){
 		// TODO: Update the map
-		calculateMaximumValue();
+		//calculateMaximumValue();
 		if (botDataSelection$districtLevel=="districts") {
 			console.log("Selected Data for bot map:"+botDataSelection$districtLevel+" "+botDataSelection$category+" "+botDataSelection$comparedDistricts);}
 		else {
 			console.log("Selected Data for bot map:"+botDataSelection$districtLevel+" "+botDataSelection$category+" "+botDataSelection$comparedSubdistricts);}
-		color_index=0;
 		drawBotMapLayer();
 		updateChart();
 	}
@@ -759,8 +772,6 @@
 		}
 		for (var i=1, iLen = namespace.features.length; i<iLen; i++){
 			feat = namespace.features[i];
-			console.log(feat.properties.total[endYear]+", "+feat.properties.total[startYear]+", -1");
-			console.log("change: "+(feat.properties.total[endYear]/feat.properties.total[startYear]-1));
 			switch (topDataSelection$category){
 				case "total":
 					if (ch_minimum > feat.properties.total[endYear]/feat.properties.total[startYear]-1){
@@ -805,8 +816,6 @@
 						ch_maximum = feat.properties.younger25[endYear]/feat.properties.younger25[startYear]-1;
 					}break;
 			}
-			console.log("changes maximum set to: "+ch_maximum);
-			console.log("changes minimum set to: "+ch_minimum);
 		}
 		ch_maximum = ch_maximum*100;
 		ch_minimum = ch_minimum*100;
@@ -880,7 +889,6 @@
 		return Math.floor(Math.random()*3000);
 	}
 	
-	color_index = 0;
 	colorArray = [
 		[rgbToHex(255,255,255)], // index 0 never used: Color WHITE for indicating an error. Won't happen when released ;-)
 		[rgbToHex(70,70,220)],
@@ -1067,7 +1075,7 @@
 	}
 	
 	function updateChart(){
-		console.log("updating Linechart");
+		console.log("updating Linechart...");
 		delete data.datasets;
 		data.datasets = [];
 		if (botDataSelection$districtLevel=="districts"){
@@ -1168,7 +1176,7 @@
 					return district.properties.Color;}
 			}
 		}
-		return rgbToHex(200,150,200);
+		return rgbToHex(125,180,180);
 	}
 	
 	geojsonLayerBot = L.geoJson(featureCollectionDistricts, {
@@ -1183,6 +1191,50 @@
 					};
 				}
 	});
+	
+	function selectDistrict(e) {
+		var layer = e.target;
+		var district = layer.feature;
+		console.log(layer.feature.properties.name);
+		if (botDataSelection$districtLevel=="districts") { 
+			namespace = botDataSelection$comparedDistricts;
+			var optionlist = document.getElementById('sel_botDistricts'); }
+		else { 
+			namespace = botDataSelection$comparedSubdistricts
+			var optionlist = document.getElementById('sel_botSubdistricts'); }
+		
+		var districtWasSelected = false;
+		for (var i=0, iLen = namespace.length; i<iLen; i++){
+			if (district.properties.name == namespace[i]){
+				namespace.splice(i,1);
+				districtWasSelected = true;
+				// unselect it in Selector as well
+				for (var option = 0; option < optionlist.length; option++ ){
+					if (optionlist[option].text == district.properties.name){
+						optionlist[option].selected = false;
+						break;
+					}
+				}
+			}
+		}
+		if (!districtWasSelected) {
+			namespace.push(district.properties.name);
+			// select it in Selector as well
+			for (var option = 0; option < optionlist.length; option++ ){
+				if (optionlist[option].text == district.properties.name){
+					optionlist[option].selected = true;
+					break;
+				}
+			}
+		}
+		updateBotMap();
+	}
+	
+	function onEachFeatureBot(feature, layer) {
+		layer.on({
+			click: selectDistrict
+		});
+	}
 	
 	function drawBotMapLayer(){
 		if (!drawnFirstTimeBot) {
@@ -1200,7 +1252,7 @@
 							fillOpacity: 0.7
 						};
 					},
-					//onEachFeature: onEachFeature
+					onEachFeature: onEachFeatureBot
 				}
 			);
 		} else {
@@ -1214,7 +1266,7 @@
 							opacity: 0.8,
 							fillOpacity: 0.7
 						};
-					},
+					}
 					//onEachFeature: onEachFeature
 				}
 			);
