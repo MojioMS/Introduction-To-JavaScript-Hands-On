@@ -244,9 +244,6 @@
                 </div>
                 <div style="margin: 20px 0px 25px 0px;">
                     <select multiple class="form-control" id="sel_botSubdistricts" onchange="sel_botSubdistricts()">
-                        <option>Uppenberg</option>
-                        <option>Aaseestadt</option>
-                        <option>unknown</option>
                      </select>
                 </div>
             </div>
@@ -366,20 +363,188 @@
 	var botDataSelection$comparedDistricts = [];
 	var botDataSelection$comparedSubdistricts = [];
 	
+	function rgbToHex(r, g, b) {
+		return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+	}
+	
+	// FeatureCollection containing all subdistricts.
+	var featureCollectionSubdistricts = {
+		"type" : "FeatureCollection",
+		"properties": {
+			"districtLevel": "subdistricts"	
+		},
+		"features": [
+				
+		]
+	}
+	
+	//prefixes for the query
+	var prefixes = "\
+		prefix lodcom: <http://vocab.lodcom.de/> \n\
+		prefix dc: <http://purl.org/dc/elements/1.1/> \n\
+		prefix geo: <http://www.opengis.net/ont/geosparql#> \n\
+		prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n\
+		prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n\
+		prefix xsd: <http://www.w3.org/2001/XMLSchema#> \n\
+		prefix sparel: <http://www.ordnancesurvey.co.uk/docs/ontologies/spatialrelations.owl/>\n";
+	// endpoint url
+	var queryUrl = "http://giv-lodumdata.uni-muenster.de:8282/parliament/sparql?output=JSON&query=";
+	var district = "aegidii";
+	var subdistricts = ["aegidii","ueberwasser","dom","buddenturm","martini","pluggendorf","josef","bahnhof","hansaplatz","schlachthof","kreuz","neutor","schloss","aaseestadt","geist","schuetzenhof",/*"duesberg"*/,"hafen","rumphorst","uppenberg","gievenbeck","sentrup","mecklenbeck","albachten","roxel","nienberge","coerde","sprakel","handorf","angelmodde","wolbeck",/*"mauritz-west"*/,"berg_fidel","hiltrup-mitte","hiltrup-ost","hiltrup-west","mauritz-mitte","herz-jesu","kinderhaus-ost","kinderhaus-west","gelmer-dyckburg","gremmendorf-west","gremmendorf-ost","mauritz-ost","amelsbueren"];
+	
 	/**
 	* initialise() sets up the default starting selection when the website in loaded.
 	*/
 	function initialise(){
-		updateTopMap();
+		
+		topDataSelection$districtLevel = "districts";
+		topDataSelection$category = "total";
+		topDataSelection$dependency = "absolute";
+		topDataSelection$year = 2012;
+		topDataSelection$startingYear = 2010;
+		topDataSelection$endingYear = 2012;
 		botDataSelection$districtLevel = "districts";
 		botDataSelection$category = "total";
 		botDataSelection$comparedDistricts = [];
-		botDataSelection$comparedSubdistricts = [];
+		botDataSelection$comparedSubdistricts = [];	
+		subdistricts.forEach(function(entry){
+			var district = entry;
+			initQuery(district);
+		});
 		updateBotMap();
+		updateTopMap();
+	}
+     
+	// Function which sends the query to the triple store and stores the data as result
+	function queryTriplestore(query, district) {
+		var url = queryUrl + encodeURIComponent(query);
+		console.log(query, url);
+		$.ajax({
+			dataType: "jsonp",
+			url: url,
+			success: function(data){
+				// do sth with the json
+				// create an empty feature Object:
+				var feature = {
+					"type": "Feature",
+					"properties": {
+						"name": district,
+						"total": [],
+						"male": [],
+						"female": [],
+						"german": [],
+						"non_german": [],
+						"younger25": [],
+						"Color": rgbToHex(randomColor(),randomColor(),randomColor())
+					},
+					"geometry": {
+						"type": "Polygon",
+						"coordinates": [
+							[ [51.95,7.62],[51,59,7.62],[51.95,7.62] ]
+						]
+					}
+				};
+				
+				// fill Object with data:
+				// total values:
+				for(var i=1; i<=5;i++){
+					entry = data.results.bindings[i];
+					feature.properties.total[i-1] = entry.c.value;
+				}
+				// male values:
+				for(var i=1; i<=5;i++){
+					entry = data.results.bindings[i+5];
+					feature.properties.male[i-1] = entry.c.value;
+				}
+				// male values:
+				for(var i=1; i<=5;i++){
+					entry = data.results.bindings[i+10];
+					feature.properties.female[i-1] = entry.c.value;
+				}
+				// male values:
+				for(var i=1; i<=5;i++){
+					entry = data.results.bindings[i+15];
+					feature.properties.german[i-1] = entry.c.value;
+				}
+				// male values:
+				for(var i=1; i<=5;i++){
+					entry = data.results.bindings[i+20];
+					feature.properties.non_german[i-1] = entry.c.value;
+				}
+				// male values:
+				for(var i=1; i<=5;i++){
+					entry = data.results.bindings[i+25];
+					feature.properties.younger25[i-1] = entry.c.value;
+				}
+				
+				// TODO: add coordinates
+				var coordinates = [];
+				
+				var coords = data.results.bindings[0].d.value;
+				// parse POLYGON:
+				coords = coords.substring(coords.indexOf("((")+2, coords.indexOf("))"));
+				
+				// parse all coordinates:
+				while (coords.indexOf(",")> -1) {
+					// parse coordinate pair:
+					var coord1 = coords.substring(0, coords.indexOf(" ")-1);
+					coords = coords.substring(coords.indexOf(" ")+1);
+					var coord2 = coords.substring(0, coords.indexOf(",")-1);
+					coords = coords.substring(coords.indexOf(",")+1);
+					var coordinate_pair = [parseFloat(coord1),parseFloat(coord2)];
+					coordinates.push(coordinate_pair)
+				}
+				var resultarray = [];
+				resultarray.push(coordinates);
+				feature.geometry.coordinates = resultarray;
+				
+				
+				// Add feature into featureCollections:
+				// CASE SUBDISTRICT:
+				featureCollectionSubdistricts.features.push(feature);
+				// Add to bot selector:
+				var option = document.createElement("option");
+				option.text = feature.properties.name;
+				x = document.getElementById("sel_botSubdistricts");
+				x.add(option);
+				
+				
+				
+				// TODO: CASE DISTRICT:
+				// Add to bot selector:
+				
+				// update maps:
+				if (topDataSelection$dependency == "absolute") {
+					calculateMaximumValue();} 
+				else {
+					calculateChanges();}
+				updateBotMap();
+				updateTopMap();
+			}
+		});
 	}
 	
+	// Function which builds an example query
+	function buildQuery(district) {
+		var query = prefixes + "\
+		SELECT DISTINCT ?b ?c ?d \n\
+		WHERE { \n\
+			GRAPH <http://course.introlinkeddata.org/G5> { \n\
+			lodcom:"+ district +" ?b ?c. \n\
+			lodcom:"+ district +" dc:coverage ?name. \n\
+			?name geo:asWKT ?d. }}";
+	   return query;
+	}
+
+	//example function for getting data
+	function initQuery(dis) {
+		query = buildQuery(dis);
+		queryTriplestore(query,dis);
+	}
+	
+	
 	/**
-	*  updateTopMap() updates the top map visualization regarding to the chances of the user's selection:
+	*  updateTopMap() updates the top map visualization regarding to the changes of the user's selection:
 	*/
 	function updateTopMap(){
 		// TODO: create passing info for selections and forward to calculateMaximValue() and drawToMap()
@@ -392,7 +557,6 @@
 		// TODO: Draw Layer onto map(passing selection information forward):
 		drawTopMapLayer();
 		info.update();
-		//updateLegend();
 	}
 
 	// Top Container UI Category Selector:
@@ -711,10 +875,6 @@
 		
 	};
 	
-	function rgbToHex(r, g, b) {
-		return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-	}
-	
 	function getColor(value) {
 		var color = rgbToHex(0,0,0); // BLACK as indicating an error: will not occur at release ;-)
 		if (topDataSelection$dependency == "absolute") {
@@ -885,6 +1045,10 @@
 		document.getElementById("img_legend").src = "pictures/legend_top_absolute.png";
 	}
 	
+	function randomColor(){
+		return Math.floor(Math.random()*256);
+	}
+	
 	function rand(){
 		return Math.floor(Math.random()*3000);
 	}
@@ -943,52 +1107,6 @@
 				]]
 			}}
 			
-		]
-	}
-	
-	// FeatureCollection containing all subdistricts.
-	var featureCollectionSubdistricts = {
-		"type" : "FeatureCollection",
-		"properties": {
-			"districtLevel": "subdistricts"	
-		},
-		"features": [
-		
-			{"type": "Feature",
-			"properties": {
-				"name": "Uppenberg",
-				"total": [2632, 2805, 2823, 2882, 3009],
-				"male": [1322, 1400, 1397, 1438, 1495],
-				"female": [1310, 1405, 1426, 1444, 1514],
-				"german": [2444, 2588, 2620, 2658, 2774],
-				"non_german": [188, 217, 203, 224, 235],
-				"younger25": [215, 307, 293, 264, 294],
-				"Color": rgbToHex(70,70,220)
-			},
-			"geometry": {
-				"type": "Polygon",
-				"coordinates": [
-					[ [ 7.639498, 51.974966 ], [ 7.639285, 51.974783 ], [ 7.639213, 51.974737 ], [ 7.638931, 51.974417 ], [ 7.638501, 51.974142 ], [ 7.638213, 51.974003 ], [ 7.63807, 51.973911 ], [ 7.637638, 51.97368 ], [ 7.637565, 51.973679 ], [ 7.637131, 51.973539 ], [ 7.636696, 51.973444 ], [ 7.636552, 51.973397 ], [ 7.63648, 51.973351 ], [ 7.636481, 51.973306 ], [ 7.636339, 51.973169 ], [ 7.636275, 51.972897 ], [ 7.63621, 51.972625 ], [ 7.636069, 51.972443 ], [ 7.635555, 51.972528 ], [ 7.635188, 51.972614 ], [ 7.635113, 51.972658 ], [ 7.634088, 51.972781 ], [ 7.633647, 51.972867 ], [ 7.633574, 51.972866 ], [ 7.63306, 51.97295 ], [ 7.632621, 51.97299 ], [ 7.63137, 51.973292 ], [ 7.631077, 51.973333 ], [ 7.630856, 51.973376 ], [ 7.630783, 51.973375 ], [ 7.6299, 51.97359 ], [ 7.629091, 51.973807 ], [ 7.62865, 51.973892 ], [ 7.628062, 51.97402 ], [ 7.627767, 51.974107 ], [ 7.627253, 51.974192 ], [ 7.627033, 51.974234 ], [ 7.626373, 51.974317 ], [ 7.626225, 51.97436 ], [ 7.625639, 51.974444 ], [ 7.624833, 51.974524 ], [ 7.623663, 51.974601 ], [ 7.623371, 51.974598 ], [ 7.62264, 51.974589 ], [ 7.621545, 51.974576 ], [ 7.620815, 51.974568 ], [ 7.619649, 51.974509 ], [ 7.619503, 51.974507 ], [ 7.619211, 51.974504 ], [ 7.6187, 51.974498 ], [ 7.618116, 51.974491 ], [ 7.617752, 51.974442 ], [ 7.617679, 51.974441 ], [ 7.617314, 51.974436 ], [ 7.616293, 51.974379 ], [ 7.6152, 51.974321 ], [ 7.61396, 51.974262 ], [ 7.613887, 51.974261 ], [ 7.613303, 51.974254 ], [ 7.61221, 51.974196 ], [ 7.612137, 51.974195 ], [ 7.611772, 51.974191 ], [ 7.610313, 51.974128 ], [ 7.609802, 51.974122 ], [ 7.609729, 51.974121 ], [ 7.609437, 51.974118 ], [ 7.608345, 51.974015 ], [ 7.607981, 51.973965 ], [ 7.607908, 51.973965 ], [ 7.607401, 51.973823 ], [ 7.606967, 51.973683 ], [ 7.606318, 51.973449 ], [ 7.605871, 51.973715 ], [ 7.605499, 51.973936 ], [ 7.604979, 51.974246 ], [ 7.604681, 51.974423 ], [ 7.603937, 51.974866 ], [ 7.603863, 51.97491 ], [ 7.60349, 51.975131 ], [ 7.602819, 51.975575 ], [ 7.602151, 51.975928 ], [ 7.60163, 51.976238 ], [ 7.601257, 51.976504 ], [ 7.599249, 51.977654 ], [ 7.598432, 51.978095 ], [ 7.597761, 51.978539 ], [ 7.595679, 51.979733 ], [ 7.593744, 51.980883 ], [ 7.593148, 51.981237 ], [ 7.591066, 51.982431 ], [ 7.589726, 51.983228 ], [ 7.592246, 51.984387 ], [ 7.592391, 51.984434 ], [ 7.593478, 51.984718 ], [ 7.594058, 51.98486 ], [ 7.595799, 51.985242 ], [ 7.595872, 51.985243 ], [ 7.597107, 51.985438 ], [ 7.598052, 51.985585 ], [ 7.598852, 51.985684 ], [ 7.599656, 51.985694 ], [ 7.603303, 51.985873 ], [ 7.60622, 51.985998 ], [ 7.607022, 51.986052 ], [ 7.607603, 51.986149 ], [ 7.610072, 51.98663 ], [ 7.611234, 51.986869 ], [ 7.61509, 51.987366 ], [ 7.617054, 51.987615 ], [ 7.621346, 51.988207 ], [ 7.625347, 51.98875 ], [ 7.627819, 51.98914 ], [ 7.629275, 51.989292 ], [ 7.629714, 51.989298 ], [ 7.630296, 51.98935 ], [ 7.630516, 51.989352 ], [ 7.631685, 51.989321 ], [ 7.632564, 51.98924 ], [ 7.633226, 51.989113 ], [ 7.634035, 51.988941 ], [ 7.63499, 51.988727 ], [ 7.635727, 51.98851 ], [ 7.636466, 51.988247 ], [ 7.637581, 51.987628 ], [ 7.638617, 51.987189 ], [ 7.640023, 51.986573 ], [ 7.641351, 51.986137 ], [ 7.642088, 51.98592 ], [ 7.643119, 51.985661 ], [ 7.644148, 51.985447 ], [ 7.644661, 51.985363 ], [ 7.645467, 51.985282 ], [ 7.646786, 51.985161 ], [ 7.646382, 51.984028 ], [ 7.646317, 51.983757 ], [ 7.646247, 51.983666 ], [ 7.646249, 51.983575 ], [ 7.646113, 51.983257 ], [ 7.646047, 51.983031 ], [ 7.645975, 51.982985 ], [ 7.645842, 51.982532 ], [ 7.645771, 51.982486 ], [ 7.645774, 51.982396 ], [ 7.645702, 51.98235 ], [ 7.645356, 51.981714 ], [ 7.645076, 51.981304 ], [ 7.644937, 51.981077 ], [ 7.644729, 51.980714 ], [ 7.644657, 51.980668 ], [ 7.644589, 51.980486 ], [ 7.644449, 51.980304 ], [ 7.64438, 51.980168 ], [ 7.644239, 51.979986 ], [ 7.644241, 51.979941 ], [ 7.644172, 51.979804 ], [ 7.644033, 51.979577 ], [ 7.643688, 51.978896 ], [ 7.643483, 51.978442 ], [ 7.643059, 51.977986 ], [ 7.642491, 51.977438 ], [ 7.642348, 51.977346 ], [ 7.642349, 51.977301 ], [ 7.641135, 51.976384 ], [ 7.640279, 51.975697 ], [ 7.639996, 51.975423 ], [ 7.639781, 51.975285 ], [ 7.639782, 51.97524 ], [ 7.639567, 51.975102 ], [ 7.639498, 51.974966 ], [ 7.639498, 51.974966 ] ] 
-				]}
-			},
-			{"type": "Feature",
-			"properties": {
-				"name": "Aaseestadt",
-				"total": [1684, 1714, 1728, 1798, 1875],
-				"male": [823, 845, 812, 856, 898],
-				"female": [861, 869, 916, 942, 977],
-				"german": [1523, 1557, 1573, 1634, 1735],
-				"non_german": [161, 157, 155, 164, 140],
-				"younger25": [149, 141, 129, 156, 156],
-				"Color": rgbToHex(70,220,70)
-			},
-			"geometry": {
-				"type": "Polygon",
-				"coordinates": [
-					 [ [ 7.601884, 51.935206 ], [ 7.601743, 51.935069 ], [ 7.601595, 51.935113 ], [ 7.601302, 51.935154 ], [ 7.601083, 51.935152 ], [ 7.600794, 51.935058 ], [ 7.600507, 51.934919 ], [ 7.600364, 51.934827 ], [ 7.600148, 51.934734 ], [ 7.600003, 51.934688 ], [ 7.599856, 51.934731 ], [ 7.599188, 51.935084 ], [ 7.598819, 51.935215 ], [ 7.598671, 51.935304 ], [ 7.598596, 51.935348 ], [ 7.5983, 51.93548 ], [ 7.598004, 51.935612 ], [ 7.597708, 51.935744 ], [ 7.59756, 51.935832 ], [ 7.597265, 51.935919 ], [ 7.597191, 51.935963 ], [ 7.596895, 51.936095 ], [ 7.596672, 51.936228 ], [ 7.596373, 51.93645 ], [ 7.596301, 51.936449 ], [ 7.595852, 51.936805 ], [ 7.595328, 51.937205 ], [ 7.595105, 51.937338 ], [ 7.594957, 51.937426 ], [ 7.594436, 51.937736 ], [ 7.593989, 51.938047 ], [ 7.593691, 51.938224 ], [ 7.593318, 51.93849 ], [ 7.5925, 51.938977 ], [ 7.591756, 51.939419 ], [ 7.591159, 51.939864 ], [ 7.591731, 51.940232 ], [ 7.591873, 51.940369 ], [ 7.592017, 51.940416 ], [ 7.593031, 51.940653 ], [ 7.593827, 51.940889 ], [ 7.5939, 51.940889 ], [ 7.594114, 51.941027 ], [ 7.594329, 51.941165 ], [ 7.594328, 51.941211 ], [ 7.594468, 51.941393 ], [ 7.594532, 51.941664 ], [ 7.594531, 51.94171 ], [ 7.594602, 51.941756 ], [ 7.594738, 51.942073 ], [ 7.594876, 51.942346 ], [ 7.594874, 51.942391 ], [ 7.595443, 51.942894 ], [ 7.596579, 51.943901 ], [ 7.597078, 51.944268 ], [ 7.598284, 51.945366 ], [ 7.599207, 51.946189 ], [ 7.599773, 51.946783 ], [ 7.600269, 51.94724 ], [ 7.600551, 51.94756 ], [ 7.600689, 51.947832 ], [ 7.600972, 51.948106 ], [ 7.601113, 51.948289 ], [ 7.601398, 51.948518 ], [ 7.601684, 51.948702 ], [ 7.60197, 51.948886 ], [ 7.602472, 51.949162 ], [ 7.603477, 51.949716 ], [ 7.604847, 51.950274 ], [ 7.604991, 51.950321 ], [ 7.605704, 51.950871 ], [ 7.607491, 51.952066 ], [ 7.608276, 51.952662 ], [ 7.609135, 51.953214 ], [ 7.60992, 51.953765 ], [ 7.610278, 51.953995 ], [ 7.610635, 51.95427 ], [ 7.61228, 51.955372 ], [ 7.612778, 51.955785 ], [ 7.612996, 51.955832 ], [ 7.614008, 51.95616 ], [ 7.614514, 51.956302 ], [ 7.615311, 51.956492 ], [ 7.61654, 51.956867 ], [ 7.617482, 51.957104 ], [ 7.618424, 51.957341 ], [ 7.618936, 51.957301 ], [ 7.619448, 51.957262 ], [ 7.619382, 51.957036 ], [ 7.619318, 51.956764 ], [ 7.619178, 51.956537 ], [ 7.619188, 51.956221 ], [ 7.61919, 51.956176 ], [ 7.619265, 51.956087 ], [ 7.619267, 51.956041 ], [ 7.619345, 51.955862 ], [ 7.619349, 51.955726 ], [ 7.619427, 51.955592 ], [ 7.619506, 51.955367 ], [ 7.619593, 51.954917 ], [ 7.619676, 51.954602 ], [ 7.619625, 51.953879 ], [ 7.619555, 51.953788 ], [ 7.61949, 51.953516 ], [ 7.619421, 51.95338 ], [ 7.619214, 51.953016 ], [ 7.619215, 51.952971 ], [ 7.619007, 51.952608 ], [ 7.618936, 51.952562 ], [ 7.618937, 51.952517 ], [ 7.618724, 51.952333 ], [ 7.618513, 51.95206 ], [ 7.617741, 51.951058 ], [ 7.617672, 51.950922 ], [ 7.6176, 51.950876 ], [ 7.616685, 51.949782 ], [ 7.616334, 51.949326 ], [ 7.616121, 51.949143 ], [ 7.615348, 51.948186 ], [ 7.614996, 51.947776 ], [ 7.614924, 51.94773 ], [ 7.614785, 51.947502 ], [ 7.614081, 51.946681 ], [ 7.61373, 51.946226 ], [ 7.613658, 51.94618 ], [ 7.61366, 51.946135 ], [ 7.612604, 51.944858 ], [ 7.612464, 51.944676 ], [ 7.611832, 51.943856 ], [ 7.611619, 51.943673 ], [ 7.611409, 51.943399 ], [ 7.610916, 51.942807 ], [ 7.610353, 51.942123 ], [ 7.610282, 51.942077 ], [ 7.610283, 51.942032 ], [ 7.610143, 51.94185 ], [ 7.610071, 51.941804 ], [ 7.609791, 51.941439 ], [ 7.609579, 51.941211 ], [ 7.609156, 51.94071 ], [ 7.608592, 51.940071 ], [ 7.608452, 51.939889 ], [ 7.60803, 51.939387 ], [ 7.607461, 51.938884 ], [ 7.607105, 51.938609 ], [ 7.607032, 51.938608 ], [ 7.605885, 51.937962 ], [ 7.605454, 51.937732 ], [ 7.604739, 51.937272 ], [ 7.604523, 51.937179 ], [ 7.604095, 51.936858 ], [ 7.603952, 51.936766 ], [ 7.603737, 51.936628 ], [ 7.603381, 51.936353 ], [ 7.60281, 51.93594 ], [ 7.602384, 51.935574 ], [ 7.601884, 51.935206 ], [ 7.601884, 51.935206 ] ]
-				]}
-			}
-				
 		]
 	}
 	
