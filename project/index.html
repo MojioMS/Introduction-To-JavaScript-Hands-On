@@ -347,7 +347,7 @@
 
 	window.onload = initialise;
 	
-	var maximum = 2000;
+	var maximum = 0;
 	var ch_maximum = 0;
 	var ch_minimum = 0;
 	var geoJsonLayer;
@@ -396,7 +396,9 @@
 	* initialise() sets up the default starting selection when the website in loaded.
 	*/
 	function initialise(){
-		
+		maximum = 0;
+		ch_maximum = 0;
+		ch_minimum = 0;
 		topDataSelection$districtLevel = "districts";
 		topDataSelection$category = "total";
 		topDataSelection$dependency = "absolute";
@@ -449,32 +451,32 @@
 				// total values:
 				for(var i=1; i<=5;i++){
 					entry = data.results.bindings[i];
-					feature.properties.total[i-1] = entry.c.value;
+					feature.properties.total[i-1] = parseInt(entry.c.value);
 				}
 				// male values:
 				for(var i=1; i<=5;i++){
 					entry = data.results.bindings[i+5];
-					feature.properties.male[i-1] = entry.c.value;
+					feature.properties.male[i-1] = parseInt(entry.c.value);
 				}
 				// male values:
 				for(var i=1; i<=5;i++){
 					entry = data.results.bindings[i+10];
-					feature.properties.female[i-1] = entry.c.value;
+					feature.properties.female[i-1] = parseInt(entry.c.value);
 				}
 				// male values:
 				for(var i=1; i<=5;i++){
 					entry = data.results.bindings[i+15];
-					feature.properties.german[i-1] = entry.c.value;
+					feature.properties.german[i-1] = parseInt(entry.c.value);
 				}
 				// male values:
 				for(var i=1; i<=5;i++){
 					entry = data.results.bindings[i+20];
-					feature.properties.non_german[i-1] = entry.c.value;
+					feature.properties.non_german[i-1] = parseInt(entry.c.value);
 				}
 				// male values:
 				for(var i=1; i<=5;i++){
 					entry = data.results.bindings[i+25];
-					feature.properties.younger25[i-1] = entry.c.value;
+					feature.properties.younger25[i-1] = parseInt(entry.c.value);
 				}
 				
 				// TODO: add coordinates
@@ -1046,7 +1048,7 @@
 	}
 	
 	function randomColor(){
-		return Math.floor(Math.random()*256);
+		return Math.floor(Math.random()*255);
 	}
 	
 	function rand(){
