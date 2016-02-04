@@ -211,8 +211,8 @@
                 	<h3> District and Subdistrict Comparision </h3>
                 </div>
         <!-- Map Container Bottom-->
-        <div class="col-md-5  col-xs-12" id="mapcontainerbottom" data-step="15" data-intro='Shanka told me indians use <strong>卐</strong> to celebrate the "light", lolz.' data-position="right">
-            <div id="mapbottom">	</div>
+        <div class="col-md-5  col-xs-12" id="mapcontainerbottom">
+            <div id="mapbottom"  data-step="15" data-intro='Shanka told me indians use <strong>卐</strong> to celebrate the "light", lolz.' data-position="right">	</div>
         </div>
         
         <!-- User Interface Container Bottom -->
@@ -346,8 +346,8 @@
 	
 	// Get the context of the canvas element we want to select
 	var ctx = document.getElementById("myChart").getContext("2d");
-	var myLineChart = new Chart(ctx, { type: 'line', data:data, options: {}});
-	document.getElementById("legend").innerHTML = myLineChart.generateLegend();
+	var myBarChart = new Chart(ctx, { type: 'bar', data:data, options: {}});
+	document.getElementById("legend").innerHTML = myBarChart.generateLegend();
 
 </script>
 
@@ -424,7 +424,7 @@
 		});
 		updateBotMap();
 		updateTopMap();
-		introJs().start();
+		introJs().setOption('scrollToElement', true).start();
 	}
      
 	// Function which sends the query to the triple store and stores the data as result
@@ -1281,8 +1281,8 @@
 		}
 		// Get the context of the canvas element we want to select
 		var ctx = document.getElementById("myChart").getContext("2d");
-		var myLineChart = new Chart(ctx, { type: 'line', data:data, options: {}});
-		document.getElementById("legend").innerHTML = myLineChart.generateLegend();
+		var myBarChart = new Chart(ctx, { type: 'bar', data:data, options: {}});
+		document.getElementById("legend").innerHTML = myBarChart.generateLegend();
 	}
 	
 	drawnFirstTimeBot = true;	
