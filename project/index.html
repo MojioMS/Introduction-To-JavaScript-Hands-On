@@ -89,7 +89,6 @@
 <link href="bootstrap-slider-master/dependencies/css/bootstrap.min.css" rel="stylesheet" />
 <link href="bootstrap-slider-master/css/bootstrap-slider.css" rel="stylesheet" />
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
-<link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css" />
 <link href="intro.js-2.0/intro.js-2.0/introjs.css" rel="stylesheet" />
 
 <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
@@ -211,8 +210,8 @@
                 	<h3> District and Subdistrict Comparision </h3>
                 </div>
         <!-- Map Container Bottom-->
-        <div class="col-md-5  col-xs-12" id="mapcontainerbottom">
-            <div id="mapbottom"  data-step="15" data-intro='Shanka told me indians use <strong>卐</strong> to celebrate the "light", lolz.' data-position="right">	</div>
+        <div class="col-md-5  col-xs-12" id="mapcontainerbottom" data-step="15" data-intro='Shanka told me indians use <strong>卐</strong> to celebrate the "light", lolz.' data-position="right" data-scrollToElement=true>
+            <div id="mapbottom">	</div>
         </div>
         
         <!-- User Interface Container Bottom -->
@@ -239,9 +238,6 @@
                 </div>
                 <div style="margin: 20px 0px 25px 0px;" >
                     <select multiple class="form-control" id="sel_botDistricts" onchange="sel_botDistricts()">
-                        <option>Xmple District 1</option>
-                        <option>Xmple District 2</option>
-                        <option>unknown</option>
                      </select>
                 </div>
             </div>
@@ -387,6 +383,17 @@
 		]
 	}
 	
+	// FeatureCollection containing all districts.
+	var featureCollectionDistricts = {
+		"type" : "FeatureCollection",
+		"properties": {
+			"districtLevel": "districts"
+		},
+		"features": [
+		
+		]
+	}
+	
 	//prefixes for the query
 	var prefixes = "\
 		prefix lodcom: <http://vocab.lodcom.de/> \n\
@@ -399,7 +406,8 @@
 	// endpoint url
 	var queryUrl = "http://giv-lodumdata.uni-muenster.de:8282/parliament/sparql?output=JSON&query=";
 	var district = "aegidii";
-	var subdistricts = ["aegidii","ueberwasser","dom","buddenturm","martini","pluggendorf","josef","bahnhof","hansaplatz","schlachthof","kreuz","neutor","schloss","aaseestadt","geist","schuetzenhof","hafen","rumphorst","uppenberg","gievenbeck","sentrup","mecklenbeck","albachten","roxel","nienberge","coerde","sprakel","handorf","angelmodde","wolbeck","berg_fidel","hiltrup-mitte","hiltrup-ost","hiltrup-west","mauritz-mitte","herz-jesu","kinderhaus-ost","kinderhaus-west","gelmer-dyckburg","gremmendorf-west","gremmendorf-ost","mauritz-ost","amelsbueren","duuesberg","mauritz-west"]; //duuesberg and mauritz-west dont work
+	var subdistricts = ["aegidii","ueberwasser","dom","buddenturm","martini","pluggendorf","josef","bahnhof","hansaplatz","schlachthof","kreuz","neutor","schloss","aaseestadt","geist","schuetzenhof","hafen","rumphorst","uppenberg","gievenbeck","sentrup","mecklenbeck","albachten","roxel","nienberge","coerde","sprakel","handorf","angelmodde","wolbeck","berg_fidel","hiltrup-mitte","hiltrup-ost","hiltrup-west","mauritz-mitte","herz-jesu","kinderhaus-ost","kinderhaus-west","gelmer-dyckburg","gremmendorf-west","gremmendorf-ost","mauritz-ost","amelsbueren","dueesberg","mauritz-west"]; //duuesberg and mauritz-west dont work
+	var districts = ["mitte","west","nord","ost","suedost","hiltrup"];
 	
 	/**
 	* initialise() sets up the default starting selection when the website in loaded.
@@ -418,17 +426,21 @@
 		botDataSelection$category = "total";
 		botDataSelection$comparedDistricts = [];
 		botDataSelection$comparedSubdistricts = [];	
+		districts.forEach(function(entry){
+			var district = entry;
+			initQuery(district,"district");
+		});
 		subdistricts.forEach(function(entry){
 			var district = entry;
-			initQuery(district);
+			initQuery(district,"subdistrict");
 		});
 		updateBotMap();
 		updateTopMap();
-		introJs().setOption('scrollToElement', true).start();
+		introJs().setOption("scrollToElement", "true").start();
 	}
      
 	// Function which sends the query to the triple store and stores the data as result
-	function queryTriplestore(query, district) {
+	function queryTriplestore(query, district, districtLevel) {
 		var url = queryUrl + encodeURIComponent(query);
 		console.log(query, url);
 		$.ajax({
@@ -457,35 +469,39 @@
 					}
 				};
 				
+				var index_corrector_districts = 0;
+				if (districtLevel == "district")
+					index_corrector_districts = 0;
+				
 				// fill Object with data:
 				// total values:
 				for(var i=1; i<=5;i++){
-					entry = data.results.bindings[i];
+					entry = data.results.bindings[i+index_corrector_districts];
 					feature.properties.total[i-1] = parseInt(entry.c.value);
 				}
 				// male values:
 				for(var i=1; i<=5;i++){
-					entry = data.results.bindings[i+5];
+					entry = data.results.bindings[i+5+index_corrector_districts];
 					feature.properties.male[i-1] = parseInt(entry.c.value);
 				}
 				// male values:
 				for(var i=1; i<=5;i++){
-					entry = data.results.bindings[i+10];
+					entry = data.results.bindings[i+10+index_corrector_districts];
 					feature.properties.female[i-1] = parseInt(entry.c.value);
 				}
 				// male values:
 				for(var i=1; i<=5;i++){
-					entry = data.results.bindings[i+15];
+					entry = data.results.bindings[i+15+index_corrector_districts];
 					feature.properties.german[i-1] = parseInt(entry.c.value);
 				}
 				// male values:
 				for(var i=1; i<=5;i++){
-					entry = data.results.bindings[i+20];
+					entry = data.results.bindings[i+20+index_corrector_districts];
 					feature.properties.non_german[i-1] = parseInt(entry.c.value);
 				}
 				// male values:
 				for(var i=1; i<=5;i++){
-					entry = data.results.bindings[i+25];
+					entry = data.results.bindings[i+25+index_corrector_districts];
 					feature.properties.younger25[i-1] = parseInt(entry.c.value);
 				}
 				
@@ -512,19 +528,23 @@
 				
 				
 				// Add feature into featureCollections:
-				// CASE SUBDISTRICT:
-				featureCollectionSubdistricts.features.push(feature);
-				// Add to bot selector:
-				var option = document.createElement("option");
-				option.text = feature.properties.name;
-				x = document.getElementById("sel_botSubdistricts");
-				x.add(option);
-				
-				
-				
-				// TODO: CASE DISTRICT:
-				// Add to bot selector:
-				
+				if (districtLevel == "subdistrict") {
+					// CASE SUBDISTRICT:
+					featureCollectionSubdistricts.features.push(feature);
+					// Add to bot selector:
+					var option = document.createElement("option");
+					option.text = feature.properties.name;
+					x = document.getElementById("sel_botSubdistricts");
+					x.add(option);
+				} else {
+					// CASE DISTRICT:
+					featureCollectionDistricts.features.push(feature);
+					// Add to bot selector:
+					var option = document.createElement("option");
+					option.text = feature.properties.name;
+					x = document.getElementById("sel_botDistricts");
+					x.add(option);
+				}
 				// Update Map's after a district is loaded:
 				updateBotMap();
 				updateTopMap();
@@ -545,9 +565,9 @@
 	}
 
 	//example function for getting data
-	function initQuery(dis) {
+	function initQuery(dis,districtLevel) {
 		query = buildQuery(dis);
-		queryTriplestore(query,dis);
+		queryTriplestore(query,dis,districtLevel);
 	}
 	
 	
@@ -1071,52 +1091,6 @@
 		[rgbToHex(270,10,10)],
 		[rgbToHex(255,106,0)]
 	]
-	
-	// FeatureCollection containing all districts.
-	var featureCollectionDistricts = {
-		"type" : "FeatureCollection",
-		"properties": {
-			"districtLevel": "districts"
-		},
-		"features": [
-			
-			{"type": "Feature",
-			"properties": {
-				"name": "Xmple District 1",
-				"total": [rand(), rand(), rand(), rand(), rand()],
-				"male": [rand(), rand(), rand(), rand(), rand()],
-				"female": [rand(), rand(), rand(), rand(), rand()],
-				"german": [rand(), rand(), rand(), rand(), rand()],
-				"non_german": [rand(), rand(), rand(), rand(), rand()],
-				"younger25": [rand(), rand(), rand(), rand(), rand()],
-				"Color": rgbToHex(220,70,70)
-			},
-			"geometry": {
-				"type": "Polygon", 
-				"coordinates": [ [
-					[ 7.639498, 51.974966 ], [ 7.595872, 51.985243 ], [ 7.594468, 51.941393 ], [ 7.60281, 51.93594 ]
-				]]
-			}},
-			{"type": "Feature",
-			"properties": {
-				"name": "Xmple District 2",
-				"total": [rand(), rand(), rand(), rand(), rand()],
-				"male": [rand(), rand(), rand(), rand(), rand()],
-				"female": [rand(), rand(), rand(), rand(), rand()],
-				"german": [rand(), rand(), rand(), rand(), rand()],
-				"non_german": [rand(), rand(), rand(), rand(), rand()],
-				"younger25": [rand(), rand(), rand(), rand(), rand()],
-				"Color": rgbToHex(250,250,0)
-			},
-			"geometry": {
-				"type": "Polygon", 
-				"coordinates": [ [
-					[ 7.639498, 51.974966 ], [ 7.60281, 51.93594 ], [ 7.66281, 51.96 ], [ 7.64281, 51.98 ]
-				]]
-			}}
-			
-		]
-	}
 	
 	geojsonLayer = L.geoJson(featureCollectionDistricts, {
 		style: function(Feature) {
