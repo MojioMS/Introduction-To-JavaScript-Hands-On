@@ -406,7 +406,7 @@
 	// endpoint url
 	var queryUrl = "http://giv-lodumdata.uni-muenster.de:8282/parliament/sparql?output=JSON&query=";
 	var district = "aegidii";
-	var subdistricts = ["aegidii","ueberwasser","dom","buddenturm","martini","pluggendorf","josef","bahnhof","hansaplatz","schlachthof","kreuz","neutor","schloss","aaseestadt","geist","schuetzenhof","hafen","rumphorst","uppenberg","gievenbeck","sentrup","mecklenbeck","albachten","roxel","nienberge","coerde","sprakel","handorf","angelmodde","wolbeck","berg_fidel","hiltrup-mitte","hiltrup-ost","hiltrup-west","mauritz-mitte","herz-jesu","kinderhaus-ost","kinderhaus-west","gelmer-dyckburg","gremmendorf-west","gremmendorf-ost","mauritz-ost","amelsbueren","dueesberg","mauritz-west"]; //duuesberg and mauritz-west dont work
+	var subdistricts = ["aegidii","ueberwasser","dom","buddenturm","martini","pluggendorf","josef","bahnhof","hansaplatz","schlachthof","kreuz","neutor","schloss","aaseestadt","geist","schuetzenhof","hafen","rumphorst","uppenberg","gievenbeck","sentrup","mecklenbeck","albachten","roxel","nienberge","coerde","sprakel","handorf","angelmodde","wolbeck","berg_fidel","hiltrup-mitte","hiltrup-ost","hiltrup-west","mauritz-mitte","herz-jesu","kinderhaus-ost","kinderhaus-west","gelmer-dyckburg","gremmendorf-west","gremmendorf-ost","mauritz-ost","amelsbueren","dueesberg","mauritz-west"]; //duuesberg and mauritz-west dont work ];
 	var districts = ["mitte","west","nord","ost","suedost","hiltrup"];
 	
 	/**
@@ -469,40 +469,80 @@
 					}
 				};
 				
-				var index_corrector_districts = 0;
-				if (districtLevel == "district")
-					index_corrector_districts = 0;
+				for (var i=0; i<data.results.bindings.length;i++){
+					console.log("data#"+i+": "+data.results.bindings[i].c.value);
+				}
 				
-				// fill Object with data:
-				// total values:
-				for(var i=1; i<=5;i++){
-					entry = data.results.bindings[i+index_corrector_districts];
-					feature.properties.total[i-1] = parseInt(entry.c.value);
-				}
-				// male values:
-				for(var i=1; i<=5;i++){
-					entry = data.results.bindings[i+5+index_corrector_districts];
-					feature.properties.male[i-1] = parseInt(entry.c.value);
-				}
-				// male values:
-				for(var i=1; i<=5;i++){
-					entry = data.results.bindings[i+10+index_corrector_districts];
-					feature.properties.female[i-1] = parseInt(entry.c.value);
-				}
-				// male values:
-				for(var i=1; i<=5;i++){
-					entry = data.results.bindings[i+15+index_corrector_districts];
-					feature.properties.german[i-1] = parseInt(entry.c.value);
-				}
-				// male values:
-				for(var i=1; i<=5;i++){
-					entry = data.results.bindings[i+20+index_corrector_districts];
-					feature.properties.non_german[i-1] = parseInt(entry.c.value);
-				}
-				// male values:
-				for(var i=1; i<=5;i++){
-					entry = data.results.bindings[i+25+index_corrector_districts];
-					feature.properties.younger25[i-1] = parseInt(entry.c.value);
+				// SUBDISTRICT DATA BINDING:
+				if (districtLevel == "subdistrict"){
+					console.log("Im here in subdistricts");
+					// fill Object with data:
+					// total values:
+					for(var i=1; i<=5;i++){
+						entry = data.results.bindings[6-i];
+						feature.properties.younger25[i-1] = parseInt(entry.c.value);
+					}
+					// male values:
+					for(var i=1; i<=5;i++){
+						entry = data.results.bindings[11-i];
+						feature.properties.non_german[i-1] = parseInt(entry.c.value);
+					}
+					// male values:
+					for(var i=1; i<=5;i++){
+						entry = data.results.bindings[16-i];
+						feature.properties.german[i-1] = parseInt(entry.c.value);
+					}
+					// male values:
+					for(var i=1; i<=5;i++){
+						entry = data.results.bindings[21-i];
+						feature.properties.female[i-1] = parseInt(entry.c.value);
+					}
+					// male values:
+					for(var i=1; i<=5;i++){
+						entry = data.results.bindings[26-i];
+						feature.properties.male[i-1] = parseInt(entry.c.value);
+					}
+					// male values:
+					for(var i=1; i<=5;i++){
+						entry = data.results.bindings[31-i];
+						feature.properties.total[i-1] = parseInt(entry.c.value);
+					}
+				} else {
+					console.log("Im here in districts");
+					// total values:
+					for(var i=1; i<=5;i++){
+						console.log("test" + data.results.bindings.length);
+						console.log(data.results.bindings[data.results.bindings.length-i]);
+						entry = data.results.bindings[data.results.bindings.length-i];
+						console.log("entry.c.value="+entry.c.value);
+						feature.properties.total[i-1] = parseInt(entry.c.value);
+						console.log("total["+(i-1)+"]<--"+entry.c.value+"  ("+(data.results.bindings.length-i)+")");
+					}
+					// male values:
+					for(var i=1; i<=5;i++){
+						entry = data.results.bindings[data.results.bindings.length-5-i];
+						feature.properties.male[i-1] = parseInt(entry.c.value);
+					}
+					// male values:
+					for(var i=1; i<=5;i++){
+						entry = data.results.bindings[data.results.bindings.length-10-i];
+						feature.properties.female[i-1] = parseInt(entry.c.value);
+					}
+					// male values:
+					for(var i=1; i<=5;i++){
+						entry = data.results.bindings[data.results.bindings.length-15-i];
+						feature.properties.german[i-1] = parseInt(entry.c.value);
+					}
+					// male values:
+					for(var i=1; i<=5;i++){
+						entry = data.results.bindings[data.results.bindings.length-20-i];
+						feature.properties.non_german[i-1] = parseInt(entry.c.value);
+					}
+					// male values:
+					for(var i=1; i<=5;i++){
+						entry = data.results.bindings[data.results.bindings.length-25-i];
+						feature.properties.younger25[i-1] = parseInt(entry.c.value);
+					}
 				}
 				
 				// TODO: add coordinates
@@ -565,9 +605,9 @@
 	}
 
 	//example function for getting data
-	function initQuery(dis,districtLevel) {
+	function initQuery(dis,dLevel) {
 		query = buildQuery(dis);
-		queryTriplestore(query,dis,districtLevel);
+		queryTriplestore(query,dis,dLevel);
 	}
 	
 	
