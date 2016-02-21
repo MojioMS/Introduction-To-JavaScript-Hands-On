@@ -2,76 +2,101 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<style type="text/css">
-	
-	html, body { 
-        height:100%;
-		max-width: 100%;
-		overflow-x:hidden;
-    }
-    #map {
-        height:100%;
-        border: 2px dashed black;
-    }	  
-	#mapbottom {
-        height:100%;
-        border: 2px dashed black;
-    }	  
-	#bodytopcontainer {
-		height:80%;
-		padding-bottom: 20px;
-	}
-	#bodycontainerbottom{
-		height:75%;
-	}
-	#mapcontainer {
-		height: 90%;
-	}
-	#mapcontainerbottom {
-		height: 85%;
-	}
-	.timeContainerAbsolute {
-		background:lightblue;
-	}
-	#sliderabs .slider-track-high, #sliderrel .slider-track-high, #sliderrel .slider-track-low {
-		background:yellow;
-	}
-	#sliderabs .slider-selection {
-		background:yellow;
-	}
-	#sliderabs .slider-tick, #sliderrel .slider-tick {
-		background:yellow;
-	}
-	#sliderrel .slider-tick.in-selection{
-		background: lightblue;
-	}
-	.info-box {
-		padding: 5px 5px;
-		font: 14px/16px Arial, Helvetica, sans-serif;
-		background: white;
-		background: rgba(255,255,255,0.8);
-		border-radius: 5px;
-	}
-	.info h4 {
-		margin: 0 0 5px;
-		color: #777;
-	}#legend-top {
-		position: relative;
-	}#legend-top-max {
-		position: absolute;
-		right: 0;
-	}#legend-top-min {
-		position: absolute;
-		left: 0;
-	}#legend-top-mid {
-		position: absolute;
-		left: 48%;
-	}
-/**
+    <style type="text/css">
+        html,
+        body {
+            height: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        #map {
+            height: 100%;
+            border: 2px dashed black;
+        }
+        
+        #mapbottom {
+            height: 100%;
+            border: 2px dashed black;
+        }
+        
+        #bodytopcontainer {
+            height: 80%;
+            padding-bottom: 20px;
+        }
+        
+        #bodycontainerbottom {
+            height: 75%;
+        }
+        
+        #mapcontainer {
+            height: 90%;
+        }
+        
+        #mapcontainerbottom {
+            height: 85%;
+        }
+        
+        .timeContainerAbsolute {
+            background: lightblue;
+        }
+        
+        #sliderabs .slider-track-high,
+        #sliderrel .slider-track-high,
+        #sliderrel .slider-track-low {
+            background: yellow;
+        }
+        
+        #sliderabs .slider-selection {
+            background: yellow;
+        }
+        
+        #sliderabs .slider-tick,
+        #sliderrel .slider-tick {
+            background: yellow;
+        }
+        
+        #sliderrel .slider-tick.in-selection {
+            background: lightblue;
+        }
+        
+        .info-box {
+            padding: 5px 5px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: white;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+        }
+        
+        .info h4 {
+            margin: 0 0 5px;
+            color: #777;
+        }
+        
+        #legend-top {
+            position: relative;
+        }
+        
+        #legend-top-max {
+            position: absolute;
+            right: 0;
+        }
+        
+        #legend-top-min {
+            position: absolute;
+            left: 0;
+        }
+        
+        #legend-top-mid {
+            position: absolute;
+            left: 48%;
+        }
+
+        /**
 	.legend {
 		line-height: 18px;
 		color: #555;
@@ -81,47 +106,62 @@
 		margin-right: 8px;
 		opacity: 0.7;
 	}*/
-	
-	
-</style>
+    </style>
 
 
-<link href="bootstrap-slider-master/dependencies/css/bootstrap.min.css" rel="stylesheet" />
-<link href="bootstrap-slider-master/css/bootstrap-slider.css" rel="stylesheet" />
-<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
-<link href="intro.js-2.0/intro.js-2.0/introjs.css" rel="stylesheet" />
+    <link href="bootstrap-slider-master/dependencies/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="bootstrap-slider-master/css/bootstrap-slider.css" rel="stylesheet" />
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <link href="intro.js-2.0/intro.js-2.0/introjs.css" rel="stylesheet" />
 
-<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
-<script type='text/javascript' src="bootstrap-slider-master/dependencies/js/jquery.min.js"></script>
-<script type='text/javascript' src="bootstrap-slider-master/js/bootstrap-slider.js"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="Chart.js-2.0.0-beta/Chart.js-2.0.0-beta/Chart.js" type="text/javascript"></script>
-<script src="intro.js-2.0/intro.js-2.0/intro.js" type="text/javascript"></script>
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <script type='text/javascript' src="bootstrap-slider-master/dependencies/js/jquery.min.js"></script>
+    <script type='text/javascript' src="bootstrap-slider-master/js/bootstrap-slider.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="Chart.js-2.0.0-beta/Chart.js-2.0.0-beta/Chart.js" type="text/javascript"></script>
+    <script src="intro.js-2.0/intro.js-2.0/intro.js" type="text/javascript"></script>
 
 
-<title>Employees</title>
+    <title>Employees</title>
 </head>
 
 <body role="document">
-	<!-- Navigation Bar -->
-    <nav class="navbar navbar-inverse" >
-            <div class="navbar-header">
-                <a class="navbar-brand" id="date"></a>
-            </div>
-            <div>
-                <ul class="nav navbar-nav"
-                	<li></li>
-                    <li><button data-step="4" data-intro='You can allways get back to the Map-View by clicking on this button.'>Map</button></li>
-                    <li><button data-step="3" data-intro='If you want to know what this website is all about, click here.'>About</button></li>
-                    <li><button data-step="2" data-intro='If you want to see license information about this website and the licenses of used tools, click this button.'>License Information</button></li>
-                    <li><button data-step="1" onclick="introJs().goToStep(1).start();" data-intro='Welcome! </br> If you need help, just click the Tutorial button for a step-by-step survey through the facilities of the website.'>Tutorial</button></li>
-                </ul>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-inverse">
+        <div class="navbar-header">
+            <a class="navbar-brand" id="date"></a>
         </div>
-    </nav> 
-   
-    <div class="container col-md-5 col-xs-12" id="info-box" data-step="5" data-intro='<strong>The Title</strong></br> You can read here which data is visualized.' data-position="bottom-right-aligned"><h4>Total employees subject to social insurance contributions in 2012</h4><br /><b>Hover over a district '</b>);</div>
+        <div>
+            <ul class="nav navbar-nav" <li>
+                </li>
+                <li>
+                    <button class="btn btn-lg dropdown-toggle" type="button" data-toggle="dropdown"  id="aboutButton" data-content="" data-step="3" data-intro='If you want to know what this website is all about, click here.'>About
+					<span class="caret"></span></button>
+					<ul class="dropdown-menu">
+						<li><a href="OurWebsite.html">Website</a></li>
+						<li><a href="OurStory.html">Our Story</a></li>
+						<li><a href="Acknowledgement.html">Acknowledgement and Credit</a></li>
+						<li><a href="http://www.stadt-muenster.de/fileadmin//user_upload/stadt-muenster/61_stadtentwicklung/pdf/sms/SMS_Beschaeftigte_2014.pdf">Reference</a></li>
+					</ul>
+				</li>
+                <li>
+                    <button type="button" class="btn btn-lg"  data-placement="bottom" data-toggle="popover" title="The MIT License (MIT)" data-content="" data-step="2" id="licenseButton" data-intro='If you want to see license information about this website and the licenses of used tools, click this button.'>License Information</button>
+                </li>
+                <li>
+                    <button type="button" class="btn btn-lg" data-step="1" onclick="introJs().goToStep(1).start();" data-intro='Welcome! </br> If you need help, just click the Tutorial button for a step-by-step survey through the facilities of the website.'>Tutorial</button>
+                </li>
+               
+            </ul>
+
+        </div>
+    </nav>
+
+    <div class="container col-md-5 col-xs-12" id="info-box" data-step="5" data-intro='<strong>The Title</strong></br> You can read here which data is visualized.'
+    data-position="bottom-right-aligned">
+        <h4>Total employees subject to social insurance contributions in 2012</h4>
+        <br /><b>Hover over a district '</b>);</div>
     <div class="container col-md-3 col-xs-12" id="legend-top" style="height:10%; width:screen.witdh" data-step="6" data-intro='<strong>The legend</strong></br> The legend of the map is shown here. The values start from <strong> white </strong> and go up to <strong> blue </strong> continuously.'>
-    	<div data-step="13" data-intro='The legend has changed now into a 2-color-ramp legend. Districts with a negative change of employees are visualized now in <strong>red</strong>, positive changes in <strong>blue</strong>. Have you forgotton to select <strong>...changes in years</strong>. Go "Back" and do it now!'>
+        <div  data-intro='The legend has changed now into a 2-color-ramp legend. Districts with a negative change of employees are visualized now in <strong>red</strong>, positive changes in <strong>blue</strong>. Have you forgotton to select <strong>...changes in years</strong>. Go "Back" and do it now!'>
             <img src="pictures/legend_top_relative.png" style="height:50%; width:100%; opacity:0.7; border:1px solid #333" id="img_legend">
             <p id="legend-top-max"> maximum </p>
             <p id="legend-top-mid"> middle </p>
@@ -131,167 +171,176 @@
     <div class="col-md-5"></div>
     <!-- upper body Container -->
     <div class="row" id="bodytopcontainer">
-        
+
         <!-- Map Container -->
         <div class="panel panel-default col-md-8 col-xs-12" id="mapcontainer">
-        	<div class="panel-default" style="height:100%">
-            	<div id="map" data-step="7" data-intro='<strong> The map </strong> </br> The map shows districts of Muenster. The color of each district is corresponding to the legend. You can <strong>hover</strong> over a district to see additional information below the title. You can also <strong>click</strong> on a district to zoom into it.' data-position="right">	</div>
+            <div class="panel-default" style="height:100%">
+                <div id="map" data-step="7" data-intro='<strong> The map </strong> </br> The map shows districts of Muenster. The color of each district is corresponding to the legend. You can <strong>hover</strong> over a district to see additional information below the title. You can also <strong>click</strong> on a district to zoom into it.'
+                data-position="right"> </div>
             </div>
         </div>
         <!-- User Interface Container -->
-        <div class="panel panel-info col-md-4 col-xs-12" id="UIcontainer" data-step="8" data-intro='You can select options for the visualized data in this panel.' data-position="left">
-                <div class="panel-heading">
-                	<h3> Data option: </h3>
-                </div>
-        
-                <!-- Selector: District or Subdistricts -->
-                <div data-step="9" data-intro='You can select between showing districts or subdistricts.'> 
-                    <div class="form-group">
-                        <label for="sel_topDistrictLevel">Select district level:</label>
-                    </div>
-                    <div style="margin: 20px 0px 25px 0px;">
-                        <select class="form-control" id="sel_topDistrictLevel" onchange="sel_topDistrictLevel()">
-                            <option>Districts</option>
-                            <option>Sub-districts</option>
-                         </select>
-                    </div>
-                </div>
-                
-                <!-- Selector: Total, Male, Female, German, non-german, or  <25years -->
-                <div data-step="10" data-intro='You can select between different categories of employees you want to have visualized.' data-position="left">
-                    <div class="form-group">
-                        <label for="sel_topCategory">Select data category: </label>
-                    </div>
-                    <div style="margin: 20px 0px 25px 0px;">
-                        <select class="form-control" id="sel_topCategory" onchange="sel_topCategory()">
-                            <option>Total</option>
-                            <option>Male</option>
-                            <option>Female</option>
-                            <option>German</option>
-                            <option>non-german</option>
-                            <option>younger than 25 years</option>
-                         </select>
-                    </div>
-                </div>
-                
-                <div>
-                    <!-- Radio Buttons: show absolute values OR show changes -->
-                    <div class="container">
-                        <label for="sel_top_abs_rel">Show...</label>
-                        <form role="form" id="sel_top_abs_rel" style="margin: 0px 0px 0px 30px;">
-                            <label class="radio">
-                                <input type="radio" name="optradio" onclick="timeAbsolute()" checked="checked">...absolute values
-                            </label>
-                            <label class="radio" data-step="12" data-intro='Are you interested into the changes of the districts? Select <strong>...changes in years</strong> now and press next' data-position="left">
-                                <input type="radio" name="optradio" onclick="timeRelative()" >...changes in years
-                            </label>
-                        </form>
-                    </div>
-                    
-                    <div data-step="11" data-intro='Select between different years of the data. Give it a try and select a different year!' data-position="top">
-                        <!-- Timeline Selector(s): only one is shown at a time -->
-                        <div id="timeContainerAbsolute" style="margin: 50px 0px 25px 30px;">
-                             <input id="sliderabs" type="text"/> <!-- absolute timeline: 1 from {2010,2011,2012,2013,2014}-->
-                        </div>
-                        <div id="timeContainerRelative" style="margin: 50px 0px 25px 30px;" data-step="14" data-intro='Now you can select a Start- and End-year upon which the calculation of changes is based on. Do it and observe how the map and the legend changes.' data-position="top">
-                             <input id="sliderrel" type="text"/> <!-- relative changes: 2 non-equal from {2010,2011,2012,2013,2014}-->
-                        </div>
-                    </div>
-                </div>
-            
-            
-        </div>
-    </div>
-    
-    <!-- lower body container -->
-    <div class="row" style="height: 100%">
-    	<div class="col-md-12 col-xs-12 panel panel-primary" id="bodycontainerbottom" >
-                <div class="panel-heading">
-                	<h3> District and Subdistrict Comparision </h3>
-                </div>
-        <!-- Map Container Bottom-->
-        <div class="col-md-5  col-xs-12" id="mapcontainerbottom" data-step="15" data-intro='Shanka told me indians use <strong>卐</strong> to celebrate the "light", lolz.' data-position="right" data-scrollToElement=true>
-            <div id="mapbottom">	</div>
-        </div>
-        
-        <!-- User Interface Container Bottom -->
-        <div class="col-md-2  col-xs-12 panel panel-info" id="UIcontainerbottom">
+        <div class="panel panel-info col-md-4 col-xs-12" id="UIcontainer" data-step="8" data-intro='You can select options for the visualized data in this panel.'
+        data-position="left">
             <div class="panel-heading">
-                <h4> Comparison option: </h4>
+                <h3> Data option: </h3>
             </div>
-    
+
             <!-- Selector: District or Subdistricts -->
-            <div class="form-group">
-                <label for="sel_botDistrictLevel">Select district level:</label>
-            </div>
-            <div style="margin: 20px 0px 25px 0px;">
-                <select class="form-control" id="sel_botDistrictLevel" onchange="sel_botDistrictLevel()">
-                    <option onclick="show_districts()">Districts</option>
-                    <option onclick="show_subdistricts()">Sub-districts</option>
-                 </select>
-            </div>
-            
-            <!-- Selector: Selection of Districts -->
-            <div id="sel_dis">
-                <div class="form-group"> 
-                    <label for="sel_botDistricts">Select districts by clicking on them at the map or select them from the list below: </label>
-                </div>
-                <div style="margin: 20px 0px 25px 0px;" >
-                    <select multiple class="form-control" id="sel_botDistricts" onchange="sel_botDistricts()">
-                     </select>
-                </div>
-            </div>
-            
-            <!-- Selector: Selection of Subdistricts -->
-            <div id="sel_subdis">
-                <div class="form-group"> 
-                    <label for="sel_botSubdistricts">Select subdistricts by clicking on them at the map or select them from the list below: </label>
+            <div data-step="9" data-intro='You can select between showing districts or subdistricts.'>
+                <div class="form-group">
+                    <label for="sel_topDistrictLevel">Select district level:</label>
                 </div>
                 <div style="margin: 20px 0px 25px 0px;">
-                    <select multiple class="form-control" id="sel_botSubdistricts" onchange="sel_botSubdistricts()">
-                     </select>
+                    <select class="form-control" id="sel_topDistrictLevel" onchange="sel_topDistrictLevel()">
+                        <option>Districts</option>
+                        <option>Sub-districts</option>
+                    </select>
                 </div>
             </div>
-            
+
             <!-- Selector: Total, Male, Female, German, non-german, or  <25years -->
-            <div class="form-group">
-                <label for="sel_botCategory">Select data category: </label>
-            </div>
-            <div style="margin: 20px 0px 25px 0px;">
-                <select class="form-control" id="sel_botCategory" onchange="sel_botCategory()">
-                    <option>Total</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                    <option>German</option>
-                    <option>non-german</option>
-                    <option>younger than 25 years</option>
-                 </select>
-            </div>
-        </div>
-        
-        <!-- detailChart -->
-        <div class="col-md-5 col-xs-12 panel">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 id="diagram_title_dis"> Districts in comparison:</h3>
-                    <h3 hidden id="diagram_title_subdis"> Subdistricts in comparison: </h3>
+            <div data-step="10" data-intro='You can select between different categories of employees you want to have visualized.' data-position="left">
+                <div class="form-group">
+                    <label for="sel_topCategory">Select data category: </label>
                 </div>
-                <canvas id="myChart"></canvas>
-                <div id="legend">
+                <div style="margin: 20px 0px 25px 0px;">
+                    <select class="form-control" id="sel_topCategory" onchange="sel_topCategory()">
+                        <option>Total</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>German</option>
+                        <option>non-german</option>
+                        <option>younger than 25 years</option>
+                    </select>
                 </div>
+            </div>
+
+            <div>
+                <!-- Radio Buttons: show absolute values OR show changes -->
+                <div class="container">
+                    <label for="sel_top_abs_rel">Show...</label>
+                    <form role="form" id="sel_top_abs_rel" style="margin: 0px 0px 0px 30px;">
+                        <label class="radio">
+                            <input type="radio" name="optradio" onclick="timeAbsolute()" checked="checked">...absolute values
+                        </label>
+                        <label class="radio" data-step="12" data-intro='Are you interested into the changes of the districts? Select <strong>...changes in years</strong> now and press next'
+                        data-position="left">
+                            <input type="radio" name="optradio" onclick="timeRelative()">...changes in years
+                        </label>
+                    </form>
+                </div>
+
+                <div data-step="11" data-intro='Select between different years of the data. Give it a try and select a different year!' data-position="top">
+                    <!-- Timeline Selector(s): only one is shown at a time -->
+                    <div id="timeContainerAbsolute" style="margin: 50px 0px 25px 30px;">
+                        <input id="sliderabs" type="text" />
+                        <!-- absolute timeline: 1 from {2010,2011,2012,2013,2014}-->
+                    </div>
+                    <div id="timeContainerRelative" style="margin: 50px 0px 25px 30px;" 
+                    data-position="top">
+                        <input id="sliderrel" type="text" />
+                        <!-- relative changes: 2 non-equal from {2010,2011,2012,2013,2014}-->
+                    </div>
+                </div>
+            </div>
+
 
         </div>
     </div>
+
+    <!-- lower body container -->
+    <div class="row" style="height: 100%">
+        <div class="col-md-12 col-xs-12 panel panel-primary" id="bodycontainerbottom">
+            <div class="panel-heading">
+                <h3> District and Subdistrict Comparision </h3>
+            </div>
+            <!-- Map Container Bottom-->
+            <div class="col-md-5  col-xs-12" id="mapcontainerbottom"
+            data-position="right" data-scrollToElement=true>
+                <div id="mapbottom"> </div>
+            </div>
+
+            <!-- User Interface Container Bottom -->
+            <div class="col-md-2  col-xs-12 panel panel-info" id="UIcontainerbottom">
+                <div class="panel-heading">
+                    <h4> Comparison option: </h4>
+                </div>
+
+                <!-- Selector: District or Subdistricts -->
+                <div class="form-group">
+                    <label for="sel_botDistrictLevel">Select district level:</label>
+                </div>
+                <div style="margin: 20px 0px 25px 0px;">
+                    <select class="form-control" id="sel_botDistrictLevel" onchange="sel_botDistrictLevel()">
+                        <option onclick="show_districts()">Districts</option>
+                        <option onclick="show_subdistricts()">Sub-districts</option>
+                    </select>
+                </div>
+
+                <!-- Selector: Selection of Districts -->
+                <div id="sel_dis">
+                    <div class="form-group">
+                        <label for="sel_botDistricts">Select districts by clicking on them at the map or select them from the list below: </label>
+                    </div>
+                    <div style="margin: 20px 0px 25px 0px;">
+                        <select multiple class="form-control" id="sel_botDistricts" onchange="sel_botDistricts()">
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Selector: Selection of Subdistricts -->
+                <div id="sel_subdis">
+                    <div class="form-group">
+                        <label for="sel_botSubdistricts">Select subdistricts by clicking on them at the map or select them from the list below: </label>
+                    </div>
+                    <div style="margin: 20px 0px 25px 0px;">
+                        <select multiple class="form-control" id="sel_botSubdistricts" onchange="sel_botSubdistricts()">
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Selector: Total, Male, Female, German, non-german, or  <25years -->
+                <div class="form-group">
+                    <label for="sel_botCategory">Select data category: </label>
+                </div>
+                <div style="margin: 20px 0px 25px 0px;">
+                    <select class="form-control" id="sel_botCategory" onchange="sel_botCategory()">
+                        <option>Total</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>German</option>
+                        <option>non-german</option>
+                        <option>younger than 25 years</option>
+                    </select>
+                   
+                </div>
+               <!-- <button type="button" class="btn btn-lg" data-h onclick="introJs().goToStep(16).start();" >Tutorial</button> -->
+            </div>
+
+            <!-- detailChart -->
+            <div class="col-md-5 col-xs-12 panel">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 id="diagram_title_dis"> Districts in comparison:</h3>
+                        <h3 hidden id="diagram_title_subdis"> Subdistricts in comparison: </h3>
+                    </div>
+                    <canvas id="myChart"></canvas>
+                    <div id="legend">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        
+         
     </div>
-  
     
-    </div>
 
 </body>
 
 <script>
-	
-	var data = {
+    var data = {
 		labels: ["2010", "2011", "2012", "2013", "2014"],
 		datasets: [
 			{
@@ -349,8 +398,7 @@
 
 <!-- The following Script handles the triggers of the Top map User interfaces and updates the top map visualization -->
 <script>
-
-	window.onload = initialise;
+    window.onload = initialise;
 	
 	var maximum = 0;
 	var ch_maximum = 0;
@@ -406,7 +454,7 @@
 	// endpoint url
 	var queryUrl = "http://giv-lodumdata.uni-muenster.de:8282/parliament/sparql?output=JSON&query=";
 	var district = "aegidii";
-	var subdistricts = ["aegidii","ueberwasser","dom","buddenturm","martini","pluggendorf","josef","bahnhof","hansaplatz","schlachthof","kreuz","neutor","schloss","aaseestadt","geist","schuetzenhof","hafen","rumphorst","uppenberg","gievenbeck","sentrup","mecklenbeck","albachten","roxel","nienberge","coerde","sprakel","handorf","angelmodde","wolbeck","berg_fidel","hiltrup-mitte","hiltrup-ost","hiltrup-west","mauritz-mitte","herz-jesu","kinderhaus-ost","kinderhaus-west","gelmer-dyckburg","gremmendorf-west","gremmendorf-ost","mauritz-ost","amelsbueren","dueesberg","mauritz-west"]; //duuesberg and mauritz-west dont work ];
+	var subdistricts = ["aegidii","ueberwasser","dom","buddenturm","martini","pluggendorf","josef","bahnhof","hansaplatz","schlachthof","kreuz","neutor","schloss","aaseestadt","geist","schuetzenhof","hafen","rumphorst","uppenberg","gievenbeck","sentrup","mecklenbeck","albachten","roxel","nienberge","coerde","sprakel","handorf","angelmodde","wolbeck","berg_fidel","hiltrup-mitte","hiltrup-ost","hiltrup-west","mauritz-mitte","herz-jesu","kinderhaus-ost","kinderhaus-west","gelmer-dyckburg","gremmendorf-west","gremmendorf-ost","mauritz-ost","amelsbueren","dueesberg","mauritz-west"]; //duuesberg and mauritz-west dont work ]; //duuesberg and mauritz-west dont work
 	var districts = ["mitte","west","nord","ost","suedost","hiltrup"];
 	
 	/**
@@ -468,17 +516,21 @@
 						]
 					}
 				};
-				
-				for (var i=0; i<data.results.bindings.length;i++){
+
+
+
+                for (var i=0; i<data.results.bindings.length;i++){
 					console.log("data#"+i+": "+data.results.bindings[i].c.value);
 				}
-				
-				// SUBDISTRICT DATA BINDING:
+                
+                // SUBDISTRICT DATA BINDING:
 				if (districtLevel == "subdistrict"){
-					console.log("Im here in subdistricts");
-					// fill Object with data:
-					// total values:
-					for(var i=1; i<=5;i++){
+					console.log("Im here in subdistricts");				
+				
+				// fill Object with data:
+				// total values:
+
+                for(var i=1; i<=5;i++){
 						entry = data.results.bindings[6-i];
 						feature.properties.younger25[i-1] = parseInt(entry.c.value);
 					}
@@ -543,8 +595,8 @@
 						entry = data.results.bindings[data.results.bindings.length-25-i];
 						feature.properties.younger25[i-1] = parseInt(entry.c.value);
 					}
-				}
-				
+				}    
+
 				// TODO: add coordinates
 				var coordinates = [];
 				
@@ -726,8 +778,7 @@
 
 <!-- The following Script handles the triggers of the Bottom map User interfaces and updates the bottom map visualization -->
 <script>
-	
-	/**
+    /**
 	*  updateBotMap() updates the top map visualization regarding to the chances of the user's selection:
 	*/
 	function updateBotMap(){
@@ -847,14 +898,19 @@
 
 
 <script>
-
-	bounds = new L.LatLngBounds(new L.LatLng(51.815922, 7.314666), new L.LatLng(52.153459, 8.042863));
+    bounds = new L.LatLngBounds(new L.LatLng(51.815922, 7.314666), new L.LatLng(52.153459, 8.042863));
 	var maximum_rounded;
 	var map = L.map("map").setView([51.959264, 7.625857], 12).setMaxBounds(bounds);
 	var map_bottom = L.map("mapbottom").setView([51.959264, 7.625857], 12).setMaxBounds(bounds);
 	map.setZoom(map.getBoundsZoom(bounds,true));
 	map_bottom.setZoom(map.getBoundsZoom(bounds,true));
-	
+    //adding min + max Zoom Level
+	map.options.minZoom = 11;
+    map.options.maxZoom = 18;
+    map.fire('zoomend');
+    map_bottom.options.minZoom = 11;
+    map_bottom.options.maxZoom = 18;
+    map_bottom.fire('zoomend');
 	// OSM layer
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -1299,7 +1355,7 @@
 		document.getElementById("legend").innerHTML = myBarChart.generateLegend();
 	}
 	
-	drawnFirstTimeBot = true;	
+	var drawnFirstTimeBot = true;	
 	
 	function getSelectionColor(district){
 		var name = district.properties.name;
@@ -1418,7 +1474,38 @@
 	
 	$("#timeContainerRelative").hide();
 	$("#sel_subdis").hide();
-	
+    
+    //popup init
+    $(function () {
+        $('[data-toggle="popover"]').popover({
+            container: 'body'
+        })
+        //adding license to button
+        $("#licenseButton").attr({"data-content": license});
+        $("#aboutButton").attr({"data-content": about});
+})
+
+    //license string
+    var license = "Permission is hereby granted, free of charge, to any person obtaining a copy "+
+        "of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including "+
+        "without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, "+
+        "and to permit persons to whom the Software is furnished to do so, subject to the following conditions: "+
+        "The above copyright notice and this permission notice shall be included in all "+
+        "copies or substantial portions of the Software. "+
+        "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR "+
+        "IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, "+
+        "FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE "+
+        "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"+
+        "LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,"+
+        "OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE "+
+        "SOFTWARE.";
+        
+    var about = "With the help of this web application you can visualize numbers of social insurance employees of Münster from 2010 to 2014 via two maps. There "+
+                "are several categories of which to choose data from being displayed. You can also distinguish different districts and sub-districts of Münster. "+
+                "It makes use of the Linked Data approach to query its data from a triple store instead of SQL- or NoSQL-databases.";
+        
+     
+
 </script>
 
 
